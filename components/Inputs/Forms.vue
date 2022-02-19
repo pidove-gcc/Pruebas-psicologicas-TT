@@ -2,7 +2,7 @@
 <div class="container">
     <div v-if="option" align="center" class="mt-5 border border-primary">
         <b-card title="Iniciar sesion">
-            <b-form @submit.stop.prevent="onSubmit">
+            <b-form @submit.stop.prevent="starsession('administrador')">
                 <b-form-group id="input-group-1" label="Correo electronico:" label-for="input-1">
                     <b-form-input id="input-1" type="email" placeholder="Enter email" required>
                     </b-form-input>
@@ -19,7 +19,7 @@
             <div>
                 <label class="button text-primary" @click="setform">{{text}}</label>
             </div>
-            <b-button>Ingresar como invitado</b-button>
+            <b-button @click="starsession('invitado')">Ingresar como invitado</b-button>
         </b-card>
     </div>
     <div v-else align="center" class="mt-5 col-md-5 border border-primary">
@@ -94,6 +94,7 @@ export default {
     layout: "empty",
     data() {
         return {
+            type: ['', 'info', 'success', 'warning', 'danger'],
             option: true,
             text: 'Registrarse',
             usuario: {
@@ -122,6 +123,7 @@ export default {
     fetch({
         store
     }) {
+        console.log("Inicio aqui")
         const usuarios = []
         usuarios.push(this.usuario)
         console.log("enviado al store")
@@ -139,7 +141,24 @@ export default {
                 this.option = true
                 this.text = 'Registrarse'
             }
-        }
+        },
+        starsession(user){
+           this.$store.commit('user/setvalid',true)
+           this.$router.push('/');
+           this.notifyVue('top', 'right',user)
+        },
+          notifyVue(verticalAlign, horizontalAlign,usuario) {
+      let color = Math.floor(Math.random() * 4 + 1);
+      this.$notify({
+        message:
+          'Bienvenido ' + usuario,
+        timeout: 30000,
+        icon: 'tim-icons icon-single-02',
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.type[color]
+      });
+    }
     }
 };
 </script>

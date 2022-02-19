@@ -1,3 +1,6 @@
-export default function (context,store, redirect) {
-    return context.redirect('/login')
+export default function ({store,redirect}) {
+    if (!store.state.user.valid) {
+         return redirect('/login')
+    }
+   
 }

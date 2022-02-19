@@ -10,6 +10,24 @@ export default {
     layout: "empty",
     components: {
         Forms
+    },
+    data() {
+        return {
+            usuario: {
+                correo: 'prueba@gmail.com',
+                pass: '123456'
+            },
+        }
+    },
+    fetch({
+        store
+    }) {
+        console.log("Inicio aqui")
+        const usuario = [{"correo" : 'prueba@gmail.com', "pass" : '123456'}]
+        const usuarios = []
+        usuarios.push(usuario)
+        console.log("enviado al store")
+        return store.commit('user/setUsuarios', usuarios)
     }
 }
 </script>
