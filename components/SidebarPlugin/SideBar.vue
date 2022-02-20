@@ -6,7 +6,7 @@
           <img :src="logo" alt="app-logo" />
         </a>
         <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-          {{ title }}
+          {{ Anoun }}
         </a>
       </div>
       <slot></slot>
@@ -24,12 +24,19 @@
   </div>
 </template>
 <script>
+import SidebarItem from './SidebarItem.vue';
 export default {
+  components: { SidebarItem },
   name: 'sidebar',
   props: {
+    Anoun: {
+      type: String,
+      default: 'Pruebas psicologicas',
+      description: 'Sidebar title'
+    },
     title: {
       type: String,
-      default: 'Creative Tim',
+      default: 'TT',
       description: 'Sidebar title'
     },
     shortTitle: {

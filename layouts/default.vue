@@ -15,6 +15,14 @@
           }"
         >
         </sidebar-item>
+          <sidebar-item
+          :link="{
+            name: 'Crear prueba',
+            icon: 'tim-icons icon-notes',
+            path: '/Crear'
+          }"
+        >
+        </sidebar-item>
         <sidebar-item
           :link="{
             name: $t('sidebar.icons'),
