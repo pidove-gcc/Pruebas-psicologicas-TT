@@ -2,12 +2,14 @@ import { apiTT } from "~/repositories/Repository";
 import Repository, { serializeQuery } from "~/repositories/Repository.js";
 
 export const state = () => ({
-  admin: null,
+  admin: [],
 });
 
 export const mutations = {
   setAdmin(state, payload) {
     state.admin = payload;
+    console.log("Tengo en el store")
+    console.log(state.admin)
   },
 };
 
@@ -16,9 +18,10 @@ export const actions = {
     try {
       const response = await Repository.get(`${apiTT}/admin`);
       const result = JSON.parse(JSON.stringify(response.data));
-      console.log("Obtve");
-      console.log(result[0]);
-      commit("setAdmin", result[0]);
+      const result2 = JSON.parse(JSON.stringify(result.data))
+      console.log("Obtuve");
+      console.log(result2[0]);
+      commit("setAdmin", result2[0]);
       //   commit("setProducts", resultado);
       //   commit("setCatalogo", resultado);
       //   commit("setTotal", resultado.length);

@@ -1,5 +1,5 @@
-export default function ({store,redirect}) {
-    if (!store.state.user.valid) {
+export default function ({app,redirect}) {
+    if (!app.$cookies.get('auth')) {
          return redirect('/login')
     }
    

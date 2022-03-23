@@ -16,7 +16,8 @@
           <span class="navbar-toggler-bar bar3"></span>
         </button>
       </div>
-      <a class="navbar-brand ml-xl-3 ml-5" href="#pablo">{{ routeName }}</a>
+      <!-- {{ routeName }} -->
+      <a class="navbar-brand ml-xl-3 ml-5" href="#pablo"></a>
     </div>
 
     <ul class="navbar-nav" :class="$rtl.isRTL ? 'mr-auto' : 'ml-auto'">
@@ -92,9 +93,10 @@
         <template
           slot="title"
         >
+        <!-- :src="dataUrl" -->
           <div class="photo"><img src="img/mike.jpg" /></div>
           <b class="caret d-none d-lg-block d-xl-block"></b>
-          <p class="d-lg-none">Log out</p>
+          <p class="d-lg-none">Opciones</p>
         </template>
         <li class="nav-link">
           <a href="#" class="nav-item dropdown-item">Profile</a>
@@ -104,13 +106,16 @@
         </li>
         <div class="dropdown-divider"></div>
         <li class="nav-link">
-          <a href="/login" class="nav-item dropdown-item">Log out</a>
+          <a href="/login" @click="logout" class="nav-item dropdown-item">Cerrar sesion</a>
         </li>
       </base-dropdown>
     </ul>
   </base-nav>
 </template>
 <script>
+import {
+    mapState
+} from "vuex";
 import { CollapseTransition } from 'vue2-transitions';
 import { BaseNav, Modal } from '@/components';
 
@@ -135,11 +140,23 @@ export default {
   },
   data() {
     return {
+      ...mapState({
+                // levela: (state) => state.admin.nivel,
+                foto: (state) => state.paci.foto,
+            }),
       activeNotifications: false,
       showMenu: false,
       searchModalVisible: false,
       searchQuery: ''
     };
+  },
+  computed: {
+    dataUrl(){
+        return 'data:image/jpeg;base64,' + btoa(
+            new Uint8Array(this.foto)
+            .reduce((data, byte) => data + String.fromCharCode(byte), '')
+        );
+    }
   },
   methods: {
     capitalizeFirstLetter(string) {
@@ -150,6 +167,10 @@ export default {
     },
     closeDropDown() {
       this.activeNotifications = false;
+    },
+    logout(){
+      this.$cookies.remove('auth');
+      localStorage.removeItem('level');
     },
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);

@@ -59,7 +59,9 @@ export default {
   /*
   ** Nuxt.js dev-modules
   */
-  buildModules: [],
+  buildModules: [
+    'cookie-universal-nuxt'
+  ],
   /*
   ** Nuxt.js modules
   */

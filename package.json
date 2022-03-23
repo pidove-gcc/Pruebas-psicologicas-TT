@@ -17,6 +17,7 @@
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.21.2",
     "chart.js": "^2.7.1",
+    "cookie-universal-nuxt": "^2.1.5",
     "d3": "^5.7.0",
     "element-ui": "^2.11.1",
     "es6-promise": "^4.1.1",

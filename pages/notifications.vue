@@ -155,7 +155,7 @@ export default {
       },
     };
   },
-  methods: {
+  methods: { 
     notifyVue(verticalAlign, horizontalAlign) {
       let color = Math.floor(Math.random() * 4 + 1);
       this.$notify({
