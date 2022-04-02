@@ -15,6 +15,12 @@
             path: '/Crear'
           }">
             </sidebar-item>
+            <sidebar-item v-if="level == 0" :link="{
+            name: 'Registrar psicologo',
+            icon: 'tim-icons icon-world',
+            path: '/registerpsico'
+          }">
+            </sidebar-item>
             <sidebar-item :link="{
             name: $t('sidebar.icons'),
             icon: 'tim-icons icon-atom',

@@ -171,6 +171,7 @@ export default {
     logout(){
       this.$cookies.remove('auth');
       localStorage.removeItem('level');
+      localStorage.removeItem('usuario');
     },
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);

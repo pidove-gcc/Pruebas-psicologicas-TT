@@ -64,7 +64,9 @@ export const actions = {
   async createpaci({commit, state},payload){
       try {
         const response = await Repository.post(`${apiTT}/createpac?user=${payload.user}&pass=${payload.pass}&name=${payload.name}&lastname=${payload.lastname}&age=${payload.age}&gender=${payload.gender}&email=${payload.email}&home=${payload.home}&prod=${payload.prod}&psico=${payload.psico}&foto=${payload.foto}`);
-        return response;
+        const result = JSON.parse(JSON.stringify(response.data));
+      const msg = result.message;
+        return msg;
       } catch (error) {
         console.log(error);
       }

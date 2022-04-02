@@ -163,7 +163,7 @@ export default {
             let color = Math.floor(Math.random() * 4 + 1);
             this.$notify({
                 message: msm,
-                timeout: 30000,
+                timeout: 3000,
                 icon: 'tim-icons icon-single-02',
                 horizontalAlign: horizontalAlign,
                 verticalAlign: verticalAlign,

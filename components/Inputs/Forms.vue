@@ -20,6 +20,12 @@
                 <label class="button text-primary" @click="setform">{{ text }}</label>
             </div>
             <b-button @click="starsession('invitado')">Ingresar como invitado</b-button>
+            <b-form-file
+      placeholder="Choose a file or drop it here..."
+      drop-placeholder="Drop file here..."
+      @change="onChange"
+    ></b-form-file>
+            <b-button @click="uploadimage">Enviar imagen</b-button>
         </b-card>
     </div>
     <div v-else align="center" class="mt-5 col-md-5 border border-primary">
@@ -150,7 +156,8 @@ export default {
                 prod: '',
                 psico: '',
                 foto: '',
-            }
+            },
+            img: '',
         };
     },
     // fetch({
@@ -201,13 +208,43 @@ export default {
                     this.notifyVue("top", "right", "Usuario no registrado", 4, 'icon-simple-remove');
                 }
             }
-            // this.$store.commit("user/setvalid", true);
-            // this.$router.push("/");
-            // this.notifyVue("top", "right", user);
+
         },
         async selectUser() {
             console.log("Inicio consulta");
             await this.$store.dispatch("admin/setinfo");
+        },
+        onChange (event) {
+          this.img = event.target.files[0]
+        },
+        async uploadimage() {
+            console.log("Envio imagen");
+            console.log(this.img)
+        //     const formData = new FormData()
+        //       const blob = this.img
+        //   formData.append('image', this.img, this.img.name)
+         const formData = new FormData();
+                formData.append( 'image', this.img);
+            // await this.$store.dispatch("admin/upload",formData);
+
+            axios.post(
+        "http://127.0.0.1:8000/api/picture",{params:{images:this.img}}
+        ,{headers: {"Content-Type": "multipart/form-data"}}
+    )
+    .then(response => {
+     console.log(response)
+    })
+    .catch(e => {
+       //...
+    })
+
+
+        //      axios.post('http://127.0.0.1:8000/api/picture',{params:{
+        //         images: blob
+        //      }}, {
+        //   }).then((response) => {
+        //     console.log(response)
+        //   })
         },
 
     async    onSubmit() {
@@ -232,16 +269,22 @@ export default {
                 console.log(this.pacireg);
              const resp = await this.$store.dispatch("paci/createpaci",this.pacireg);
              console.log(resp)
+             if (resp == 'Nombre de usuario registrado, ingrese otro' || resp == 'Este correo ya esta registrado en otra cuenta') {
+                    this.notifyVue("top", "right", resp, 4, 'icon-simple-remove');   
+                } else {
+                    this.notifyVue("top", "right", resp, 1, 'icon-check-2');   
+                    this.$router.push("/");
+                }
             }
             else{
-              alert("Contraseña no igual")
+              this.notifyVue("top", "right", "Ingrese la misma contraseña", 4, 'icon-simple-remove');
             }
         },
         notifyVue(verticalAlign, horizontalAlign, msm, color, pic) {
             // let color = Math.floor(Math.random() * 4 + 1);
             this.$notify({
                 message: msm,
-                timeout: 30000,
+                timeout: 3000,
                 icon: "tim-icons " + pic,
                 horizontalAlign: horizontalAlign,
                 verticalAlign: verticalAlign,

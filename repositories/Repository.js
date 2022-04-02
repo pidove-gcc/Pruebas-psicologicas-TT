@@ -8,7 +8,8 @@ const token = Cookies.get("id_token");
 const baseDomain = "http://127.0.0.1:8000/api";
 
 export const customHeaders = {
-  "Content-Type": "application/json",
+  // "Content-Type": "application/json",
+  "Content-Type": "multipart/form-data",
   Accept: "application/json",
 };
 
