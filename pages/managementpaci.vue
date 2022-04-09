@@ -1,8 +1,8 @@
 <template>
-<div class="container">
-    <h3>Pacientes registrados</h3>
-<Pacilist :lista="list" :psico="listps"/>
-</div>
+    <div class="container">
+        <h3>Pacientes registrados</h3>
+        <Pacilist :lista="list" :psico="listps" />
+    </div>
 </template>
 
 <script>
@@ -12,7 +12,7 @@ import {
 import Pacilist from '~/components/Inputs/Pacilist.vue'
 export default {
     components: {
-         Pacilist,
+        Pacilist,
     },
     computed: {
         ...mapState({
@@ -27,7 +27,7 @@ export default {
             pacilist: [],
         }
     },
-    async mounted() {
+    async created() {
         let a = await this.$store.dispatch("paci/getpaci");
         console.log("Obtuve pacientes")
         this.pacilist = this.list
@@ -46,5 +46,4 @@ export default {
 </script>
 
 <style>
-
 </style>
