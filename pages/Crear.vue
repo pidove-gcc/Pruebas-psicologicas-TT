@@ -7,8 +7,8 @@
         <div align="center">
             <b-form-select class="form-control" v-model="typequest" align="center" id="questype" style="width: 30%" required>
                 <template #first>
-                    <b-form-select-option :value="null" style="background: gray" disabled>Seleccione</b-form-select-option>
-                    <b-form-select-option v-for="(type,index) in quest" :value="type.type" v-bind:key="index" style="background: gray">{{type.type}}</b-form-select-option>
+                    <b-form-select-option :value="null" disabled>Seleccione</b-form-select-option>
+                    <b-form-select-option v-for="(type,index) in quest" :value="type.type" v-bind:key="index" style="background: #344675">{{type.type}}</b-form-select-option>
                 </template>
             </b-form-select>
         </div>

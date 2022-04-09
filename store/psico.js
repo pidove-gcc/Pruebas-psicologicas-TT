@@ -27,6 +27,8 @@ export const mutations = {
   setFoto(state, payload){
       state.foto = payload;
       console.log("Tengo la foto")
+      console.log(state.foto);
+      localStorage.setItem('photo', payload);
   },
   setNivel(state, payload){
       state.nivel = payload;
@@ -52,10 +54,11 @@ export const actions = {
       }
       else {
       const data = JSON.parse(JSON.stringify(result.data));
+      const pic = data.img_us_rut + data.img_us
       commit("setPsico",data);
       commit("setUser",data.nombre_usuario);
       commit("setEmail",data.correo_psi);
-      commit("setFoto",data.foto);
+      commit("setFoto",pic);
       commit("setNivel",data.nivel_usuario)
       console.log("Datos del psicologo:")
       console.log(data)
@@ -77,5 +80,15 @@ export const actions = {
       } catch (error) {
         console.log(error);
       }
-  }
+  },
+  async getpsico2({commit, state}){
+    try {
+      const response = await Repository.get(`${apiTT}/psico`);
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      commit("setList",result);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+}
 };

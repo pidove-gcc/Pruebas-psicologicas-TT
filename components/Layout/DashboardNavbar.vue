@@ -94,16 +94,17 @@
           slot="title"
         >
         <!-- :src="dataUrl" -->
-          <div class="photo"><img src="img/mike.jpg" /></div>
+          <div class="photo" v-if="level == 0"><img src="img/admin.jpg" /></div>
+          <div class="photo" v-else><img :src="foto" /></div>
           <b class="caret d-none d-lg-block d-xl-block"></b>
           <p class="d-lg-none">Opciones</p>
         </template>
         <li class="nav-link">
-          <a href="#" class="nav-item dropdown-item">Profile</a>
+          <a href="#" class="nav-item dropdown-item">Editar perfil</a>
         </li>
-        <li class="nav-link">
+        <!-- <li class="nav-link">
           <a href="#" class="nav-item dropdown-item">Settings</a>
-        </li>
+        </li> -->
         <div class="dropdown-divider"></div>
         <li class="nav-link">
           <a href="/login" @click="logout" class="nav-item dropdown-item">Cerrar sesion</a>
@@ -140,14 +141,12 @@ export default {
   },
   data() {
     return {
-      ...mapState({
-                // levela: (state) => state.admin.nivel,
-                foto: (state) => state.paci.foto,
-            }),
       activeNotifications: false,
       showMenu: false,
       searchModalVisible: false,
-      searchQuery: ''
+      searchQuery: '',
+      foto: '',
+      level: ''
     };
   },
   computed: {
@@ -179,7 +178,12 @@ export default {
     toggleMenu() {
       this.showMenu = !this.showMenu;
     }
-  }
+  },
+  mounted() {
+        this.foto = localStorage.getItem('photo');
+        console.log(this.foto)
+        this.level = localStorage.getItem('level');
+    }
 };
 </script>
 <style scoped>

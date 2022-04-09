@@ -47,20 +47,21 @@ export default {
   css: [
     'assets/css/demo.css',
     'assets/css/nucleo-icons.css',
-    'assets/sass/black-dashboard.scss'
+    'assets/sass/black-dashboard.scss',
   ],
-  /*
+  /* 
   ** Plugins to load before mounting the App
   */
   plugins: [
     `~/plugins/dashboard-plugin.js`,
-    '~/plugins/bootstrap.js'
+    '~/plugins/bootstrap.js',
+    '~/plugins/vuetify.js',
   ],
   /*
   ** Nuxt.js dev-modules
   */
   buildModules: [
-    'cookie-universal-nuxt'
+    'cookie-universal-nuxt',
   ],
   /*
   ** Nuxt.js modules
@@ -68,7 +69,7 @@ export default {
   modules: [
     '@nuxtjs/pwa',
     'nuxt-i18n',
-    'bootstrap-vue/nuxt'
+    'bootstrap-vue/nuxt',
   ],
   i18n: {
     locales: [

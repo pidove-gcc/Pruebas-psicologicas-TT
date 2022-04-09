@@ -21,6 +21,18 @@
             path: '/registerpsico'
           }">
             </sidebar-item>
+            <sidebar-item v-if="level == 0" :link="{
+            name: 'Gestion de psicologos',
+            icon: 'tim-icons icon-tap-02',
+            path: '/managementpsico'
+          }">
+            </sidebar-item>
+            <sidebar-item v-if="level == 0" :link="{
+            name: 'Gestion de pacientes',
+            icon: 'tim-icons icon-badge',
+            path: '/managementpaci'
+          }">
+            </sidebar-item>
             <sidebar-item :link="{
             name: $t('sidebar.icons'),
             icon: 'tim-icons icon-atom',

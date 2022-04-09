@@ -34,12 +34,6 @@
                     <label class="button text-primary" @click="setform">{{ text }}</label>
                 </div>
                 <b-button @click="starsession('invitado')">Ingresar como invitado</b-button>
-                <b-form-file
-                    placeholder="Choose a file or drop it here..."
-                    drop-placeholder="Drop file here..."
-                    @change="onChange"
-                ></b-form-file>
-                <b-button @click="uploadimage">Enviar imagen</b-button>
             </b-card>
         </div>
         <div v-else align="center" class="mt-5 col-md-5 border border-primary">
@@ -95,6 +89,7 @@
                                     v-for="(genero, index) in sex"
                                     :value="genero.gender"
                                     v-bind:key="index"
+                                    style="background: #344675"
                                 >{{ genero.gender }}</b-form-select-option>
                             </template>
                         </b-form-select>
@@ -138,11 +133,12 @@
                             required
                         >
                             <template #first>
-                                <b-form-select-option :value="null" disabled>Seleccione</b-form-select-option>
+                                <b-form-select-option  :value="null" disabled>Seleccione</b-form-select-option>
                                 <b-form-select-option
                                     v-for="(psicologo, index) in list"
                                     :value="psicologo.nombre_usuario"
                                     v-bind:key="index"
+                                    style="background: #344675"
                                 >{{ psicologo.nombre }} {{ psicologo.apellidos }}</b-form-select-option>
                             </template>
                         </b-form-select>
@@ -316,35 +312,6 @@ export default {
         onChange(event) {
             this.img = event.target.files[0]
         },
-        async uploadimage() {
-            console.log("Envio imagen");
-            console.log(this.img)
-            //     const formData = new FormData()
-            //       const blob = this.img
-            //   formData.append('image', this.img, this.img.name)
-            const formData = new FormData();
-            formData.append('image', this.img);
-            // await this.$store.dispatch("admin/upload",formData);
-
-            axios.post(
-                "http://127.0.0.1:8000/api/picture", { params: { images: this.img } }
-                , { headers: { "Content-Type": "multipart/form-data" } }
-            )
-                .then(response => {
-                    console.log(response)
-                })
-                .catch(e => {
-                    //...
-                })
-
-
-            //      axios.post('http://127.0.0.1:8000/api/picture',{params:{
-            //         images: blob
-            //      }}, {
-            //   }).then((response) => {
-            //     console.log(response)
-            //   })
-        },
 
         async onSubmit() {
             if (this.pacipass == this.pacipassv) {
@@ -369,7 +336,7 @@ export default {
                     this.notifyVue("top", "right", resp, 4, 'icon-simple-remove');
                 } else {
                     this.notifyVue("top", "right", resp, 1, 'icon-check-2');
-                    this.$router.push("/");
+                    location.reload();
                 }
             }
             else {

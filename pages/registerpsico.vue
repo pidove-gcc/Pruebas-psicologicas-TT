@@ -24,7 +24,7 @@
                 <b-form-select v-model="psigen" class="form-control" id="register-4" required>
                     <template #first>
                         <b-form-select-option :value="null" disabled>Seleccione</b-form-select-option>
-                        <b-form-select-option v-for="(genero, index) in sex" :value="genero.gender" v-bind:key="index">{{ genero.gender }}</b-form-select-option>
+                        <b-form-select-option v-for="(genero, index) in sex" :value="genero.gender" v-bind:key="index" style="background: #344675">{{ genero.gender }}</b-form-select-option>
                     </template>
                 </b-form-select>
             </b-form-group>
@@ -32,11 +32,11 @@
                 <b-form-textarea v-model="psih" id="register-5" placeholder="Ingresa una direccion" rows="8" required></b-form-textarea>
             </b-form-group>
             <b-form-group id="register-group-6" label="Curriculum:" label-for="register-6">
-                <b-form-file v-model="psipdf" :state="Boolean(psipdf)" id="register-6" placeholder="Selecciona o arrastra      " drop-placeholder="Arrastra o selecciona">
+                <b-form-file  @change="onChange1" accept=".pdf" id="register-6" placeholder="Selecciona o arrastra      " drop-placeholder="Arrastra o selecciona">
                 </b-form-file>
             </b-form-group>
             <b-form-group id="register-group-7" label="Imagen de perfil:" label-for="register-7">
-                <b-form-file v-model="psif" :state="Boolean(psif)" accept="image/*" id="register-7" placeholder="Selecciona o arrastra      " drop-placeholder="Arrastra o selecciona">
+                <b-form-file  @change="onChange2"  accept="image/*" id="register-7" placeholder="Selecciona o arrastra      " drop-placeholder="Arrastra o selecciona">
                 </b-form-file>
             </b-form-group>
             <b-form-group id="register-group-9" label="Nombre de usuario:" label-for="register-9">
@@ -105,6 +105,14 @@ export default {
         })
     },
     methods: {
+        onChange1(event) {
+            this.psipdf = event.target.files[0]
+            console.log(this.psipdf)
+        },
+        onChange2(event) {
+            this.psif = event.target.files[0]
+            console.log(this.psif)
+        },
         async onSubmit() {
             if (this.psipass == this.psipassv) {
                 this.psireg.user = this.psiun;
@@ -115,19 +123,13 @@ export default {
                 this.psireg.gender = this.psigen;
                 this.psireg.email = this.psiem;
                 this.psireg.home = this.psih;
-                // this.psireg.pdf = this.psipdf;
-                  const formData2 = new FormData();
-                formData2.append('CV', this.psipdf);
-                this.psireg.pdf = [...formData2.entries()]
+                this.psireg.pdf = this.psipdf;
                 console.log("El CV tiene")
-                console.log(this.psireg.pdf[1])
-                this.psireg.admin = this.usuario;
-                // this.pacireg.foto = this.pacif;
-                const formData = new FormData();
-                formData.append('userpic', this.psif);
-                this.psireg.foto = [...formData.entries()]
+                console.log(this.psireg.pdf)
                 console.log("La foto tiene")
-                console.log(this.psireg.foto[1])
+                console.log(this.psireg.foto)
+                this.psireg.admin = this.usuario;
+                this.psireg.foto =  this.psif
                 console.log("Ingresaste los datos")
                 console.log(this.psireg);
                 const resp = await this.$store.dispatch("admin/createpsico", this.psireg);

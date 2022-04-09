@@ -7,6 +7,7 @@ export const state = () => ({
   email: null,
   foto: null,
   nivel: null,
+  listpaci: [],
 });
 
 export const mutations = {
@@ -26,12 +27,18 @@ export const mutations = {
   setFoto(state, payload) {
     state.foto = payload;
     console.log("Tengo la foto");
+    localStorage.setItem('photo', payload);
   },
   setNivel(state, payload) {
     state.nivel = payload;
     console.log("Tengo el nivel: " + state.nivel);
     localStorage.setItem("level", payload);
   },
+  setList(state,payload){
+    state.listpaci = payload;
+    console.log("El store tiene")
+    console.log(state.listpaci)
+}
 };
 
 export const actions = {
@@ -47,10 +54,11 @@ export const actions = {
         return msg;
       } else {
         const data = JSON.parse(JSON.stringify(result.data));
+        const pic = data.img_us_rut + data.img_us
         commit("setPaci", data);
         commit("setUser", data.nombre_usuario);
         commit("setEmail", data.correo_pac);
-        commit("setFoto", data.foto);
+        commit("setFoto", pic);
         commit("setNivel", data.nivel_usuario);
         console.log("Datos del paciente:");
         console.log(data);
@@ -76,4 +84,24 @@ export const actions = {
       console.log(error);
     }
   },
+
+  async getpaci({commit, state}){
+    try {
+      const response = await Repository.get(`${apiTT}/paci`);
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      commit("setList",result);
+    } catch (error) {
+      console.log(error);
+    }
+},
+async getpaci2({commit, state}){
+  try {
+    const response = await Repository.get(`${apiTT}/paci`);
+    const result = JSON.parse(JSON.stringify(response.data.data));
+    commit("setList",result);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
 };

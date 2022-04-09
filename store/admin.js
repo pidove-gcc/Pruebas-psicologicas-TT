@@ -53,13 +53,42 @@ export const actions = {
 
   async createpsico({commit, state},payload){
     try {
-      const response = await Repository.post(`${apiTT}/createpsico?user=${payload.user}&pass=${payload.pass}&name=${payload.name}&lastname=${payload.lastname}&age=${payload.age}&gender=${payload.gender}&email=${payload.email}&home=${payload.home}&pdf=${payload.pdf}&admin=${payload.admin}&foto=${payload.foto}`);
+      var formData = new FormData();
+      formData.append("img", payload.foto);
+      formData.append("pdf", payload.pdf);
+      const response = await Repository.post(`${apiTT}/createpsico?user=${payload.user}&pass=${payload.pass}&name=${payload.name}&lastname=${payload.lastname}&age=${payload.age}&gender=${payload.gender}&email=${payload.email}&home=${payload.home}&admin=${payload.admin}`, formData);
       const result = JSON.parse(JSON.stringify(response.data));
       const msg = result.message;
       return msg;
     } catch (error) {
       console.log(error);
     }
+},
+
+async updatepsico({commit, state},payload){
+  try {
+    // var formData = new FormData();
+    // formData.append("img", payload.foto);
+    // formData.append("pdf", payload.pdf);
+    const response = await Repository.post(`${apiTT}/updatepsico?user=${payload.user}&name=${payload.name}&lastname=${payload.lastname}&age=${payload.age}&gender=${payload.gender}&email=${payload.email}`);
+    const result = JSON.parse(JSON.stringify(response.data));
+    const msg = result.message;
+    return msg;
+  } catch (error) {
+    console.log(error);
+  }
+},
+async updatepsicof({commit, state},payload){
+  try {
+    var formData = new FormData();
+    formData.append("pdf", payload.pdf);
+    const response = await Repository.post(`${apiTT}/updatepsicof?user=${payload.user}&name=${payload.name}&lastname=${payload.lastname}&age=${payload.age}&gender=${payload.gender}&email=${payload.email}`,formData);
+    const result = JSON.parse(JSON.stringify(response.data));
+    const msg = result.message;
+    return msg;
+  } catch (error) {
+    console.log(error);
+  }
 },
 async upload({commit, state},payload){
   try {
@@ -70,5 +99,15 @@ async upload({commit, state},payload){
   } catch (error) {
     console.log(error);
   }
-}
+},
+async delete({commit, state},payload){
+  try {
+    const response = await Repository.post(`${apiTT}/deletepsico?user=${payload}`);
+    const result = JSON.parse(JSON.stringify(response.data));
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+},
 };
