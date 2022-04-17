@@ -15,6 +15,14 @@ export const mutations = {
     state.psico = payload;
     console.log("Tengo en el store")
     console.log(state.psico)
+    localStorage.setItem('nick',payload.nombre_usuario)
+    const name = payload.nombre + " " + payload.apellidos
+    const pdf = payload.img_us_rut + payload.curriculum
+    console.log("Guarde en el localStorage")
+    localStorage.setItem('usern', name);
+    localStorage.setItem('cv', pdf);
+    // console.log(name)
+    // console.log(pdf)
   },
   setUser(state, payload) {
       state.username = payload;
@@ -23,6 +31,7 @@ export const mutations = {
   setEmail(state, payload) {
       state.email = payload;
       console.log("Tengo el correo: " + state.email)
+      localStorage.setItem('email', payload);
   },
   setFoto(state, payload){
       state.foto = payload;
@@ -70,6 +79,7 @@ export const actions = {
       console.log(error);
     }
   },
+
   async getpsico({commit, state}){
       try {
         const response = await Repository.get(`${apiTT}/psico`);
@@ -81,6 +91,81 @@ export const actions = {
         console.log(error);
       }
   },
+
+  async getinfo({commit, state},payload){
+    try {
+      const response = await Repository.post(`${apiTT}/infops?email=${payload}`);
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async loadimg({commit, state},payload){
+    try {
+      const response = await Repository.post(`${apiTT}/infops?email=${payload}`);
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      const pic = result.img_us_rut + result.img_us
+      commit("setFoto", pic);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async update({commit, state},payload){
+    try {
+      const response = await Repository.post(`${apiTT}/updatepsicou?user=${payload.nombre_usuario}&name=${payload.nombre}&lastname=${payload.apellidos}&age=${payload.edad}&gender=${payload.sexo}&home=${payload.domicilio}`);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async updateimg({commit, state},payload){
+    try {
+      var formData = new FormData();
+      formData.append("img", payload.img);
+      const response = await Repository.post(`${apiTT}/setpsicoimg?user=${payload.user}`,formData);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async updatepass({commit, state},payload){
+    try {
+      console.log("La contraseña sera: " + payload.new)
+      const response = await Repository.post(`${apiTT}/updatepass?email=${payload.email}&pass=${payload.old}&newpass=${payload.new}`);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async createcode({commit, state},payload){
+    try {
+      console.log("El correo es: " + payload)
+      const response = await Repository.post(`${apiTT}/resetps?email=${payload}`);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async changepass({commit, state},payload){
+    try {
+      console.log("El contenido  es: " + payload)
+      const response = await Repository.post(`${apiTT}/setpasspsico?email=${payload.email}&pass_token=${payload.token}&password=${payload.pass}`);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   async getpsico2({commit, state}){
     try {
       const response = await Repository.get(`${apiTT}/psico`);

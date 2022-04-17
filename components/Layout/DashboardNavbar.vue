@@ -171,6 +171,13 @@ export default {
       this.$cookies.remove('auth');
       localStorage.removeItem('level');
       localStorage.removeItem('usuario');
+      localStorage.removeItem('email');
+      localStorage.removeItem('info');
+      localStorage.removeItem('nick')
+      localStorage.removeItem('usern')
+      localStorage.removeItem('cv')
+      localStorage.removeItem('prop');
+      localStorage.removeItem('photo');
     },
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
