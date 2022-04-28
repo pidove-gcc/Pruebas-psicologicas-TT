@@ -12,7 +12,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(usuario) in lista" :key="usuario.index">
+                <tr v-for="(usuario) in pageOfItems" :key="usuario.index">
                     <td>{{usuario.nombre_usuario}}</td>
                     <td>{{usuario.nombre}}</td>
                     <td>{{usuario.apellidos}}</td>
@@ -31,6 +31,10 @@
                 </tr>
             </tbody>
         </table>
+
+        <footer class="mt-30">
+                    <jw-pagination :items="lista" :pageSize="3" @changePage="onChangePage"></jw-pagination>
+                </footer>
 
         <b-modal id="modal-prevent-closing" ref="modal" title="Datos psicologo" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOk">
             <form ref="form" @submit.stop.prevent="handleSubmit">
@@ -79,12 +83,27 @@ export default {
             type: Array,
             required: true,
             default: () => {}
+        },
+        length: {
+            type: Number,
+            required: true,
+            default: 1,
         }
+    },
+    computed: {
+        
+        // rows() {
+        //     return this.lista.length
+        // },
     },
     data() {
         return {
             type: ["", "info", "success", "warning", "danger"],
             nameState: null,
+            perPage: 3,
+            currentPage: 1,
+            pageSize: 12,
+            pageOfItems: [],
             psicoreg: {
                 user: '',
                 name: '',
@@ -123,6 +142,11 @@ export default {
         },
         onChange(event) {
             this.psicoreg.pdf = event.target.files[0]
+        },
+         onChangePage(pageOfItems) {
+            // update page of items
+            this.pageOfItems = pageOfItems;
+            console.log(this.pageOfItems)
         },
         checkFormValidity() {
             const valid = this.$refs.form.checkValidity()

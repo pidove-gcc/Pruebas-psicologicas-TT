@@ -8,6 +8,7 @@ export const state = () => ({
   email: null,
   foto: null,
   nivel: null,
+  pruebas: []
 });
 
 export const mutations = {
@@ -23,6 +24,10 @@ export const mutations = {
     localStorage.setItem('cv', pdf);
     // console.log(name)
     // console.log(pdf)
+  },
+
+  setPruebas(state, payload) {
+      state.pruebas = payload;
   },
   setUser(state, payload) {
       state.username = payload;
@@ -113,6 +118,17 @@ export const actions = {
       console.log(error);
     }
   },
+  async getprueba({commit, state},payload){
+    try {
+      const response = await Repository.get(`${apiTT}/search?name=${payload}`);
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      commit("setPruebas", result);
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
   async update({commit, state},payload){
     try {
@@ -159,6 +175,27 @@ export const actions = {
     try {
       console.log("El contenido  es: " + payload)
       const response = await Repository.post(`${apiTT}/setpasspsico?email=${payload.email}&pass_token=${payload.token}&password=${payload.pass}`);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async createtrial({commit, state},payload){
+    try {
+      console.log("El contenido  es: " + payload)
+      const response = await Repository.post(`${apiTT}/creatrial?name=${payload.nombre}&trial=${payload.reactivos}&desc=${payload.descrip}&type=${payload.tipo}&clasif=${payload.clasifi}&note=${payload.note}&psico=${payload.create}`);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async createasign({commit, state},payload){
+    try {
+      console.log("El contenido  es: " + payload)
+      const response = await Repository.post(`${apiTT}/createasign?paci=${payload.paci}&trial=${payload.trialname}&deadline=${payload.deadline}&status=${payload.status}`);
       const msg = JSON.parse(JSON.stringify(response.data.message));
       return msg
     } catch (error) {

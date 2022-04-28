@@ -56,6 +56,7 @@ export default {
     `~/plugins/dashboard-plugin.js`,
     '~/plugins/bootstrap.js',
     '~/plugins/vuetify.js',
+    { src: '~/plugins/jw-pagination.js', mode: 'client' }
   ],
   /*
   ** Nuxt.js dev-modules

@@ -15,6 +15,12 @@
             path: '/Crear'
           }">
             </sidebar-item>
+            <sidebar-item v-if="level == 1" :link="{
+            name: 'Mis pruebas',
+            icon: 'tim-icons icon-single-copy-04',
+            path: '/Gestionpruebas'
+          }">
+            </sidebar-item>
             <sidebar-item v-if="level == 0" :link="{
             name: 'Registrar psicologo',
             icon: 'tim-icons icon-world',
