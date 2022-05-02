@@ -7,7 +7,7 @@ const token = Cookies.get("id_token");
 // const baseArcDomain = 'http://35.87.217.218/api';
 const baseDomain = "http://127.0.0.1:8000/api"; //api local
 // const baseDomain = "http://34.205.81.181/api";   //api produccion
-
+// const baseDomain = "https://psicott.xyz/api";   //api produccion con https
 export const customHeaders = {
   // "Content-Type": "application/json",
   "Content-Type": "multipart/form-data",

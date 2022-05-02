@@ -195,7 +195,18 @@ export const actions = {
   async createasign({commit, state},payload){
     try {
       console.log("El contenido  es: " + payload)
-      const response = await Repository.post(`${apiTT}/createasign?paci=${payload.paci}&trial=${payload.trialname}&deadline=${payload.deadline}&status=${payload.status}`);
+      const response = await Repository.post(`${apiTT}/createasign?paci=${payload.paci}&trial=${payload.trialname}&deadline=${payload.deadline}&status=${payload.status}&creador=${payload.creador}`);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async getasign({commit, state},payload){
+    try {
+      console.log("El contenido  es: " + payload)
+      const response = await Repository.get(`${apiTT}/asignpsico?psico=${payload}`);
       const msg = JSON.parse(JSON.stringify(response.data.message));
       return msg
     } catch (error) {

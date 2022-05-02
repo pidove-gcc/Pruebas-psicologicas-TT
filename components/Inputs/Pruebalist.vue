@@ -69,7 +69,8 @@ export default {
                  paci: '',
                  trialname: '',
                  deadline: '',
-                 status: 'Pendiente'
+                 status: 'Pendiente',
+                 creador: ''
              }
         }
     },
@@ -102,6 +103,7 @@ export default {
     async    handleSubmit(){
         this.trialdata.trialname = this.trial
         this.trialdata.deadline = this.deadline
+        this.trialdata.creador = localStorage.getItem('nick')
             for (let index = 0; index < this.asigntrial.length; index++) {
                 // console.log("El usuario es: " + this.asigntrial[index] + " se le asignara: " + this.trial + " para " + this.deadline)
                 this.trialdata.paci = this.asigntrial[index]
