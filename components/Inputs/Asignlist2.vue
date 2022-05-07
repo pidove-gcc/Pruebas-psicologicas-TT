@@ -5,8 +5,9 @@
                 <thead>
                     <tr>
                         <th>Prueba</th>
-                        <th>Asignado a</th>
+                        <th>Asignada por</th>
                         <th>Fecha limite</th>
+                        <th>Asignada</th>
                         <th>Status</th>
                         <th>Acciones</th>
                     </tr>
@@ -14,10 +15,11 @@
                 <tbody>
                     <tr v-for="asignation in pageOfItems" :key="asignation.index">
                         <td>{{ asignation.prueba }}</td>
-                        <td>{{ asignation.paciente }}</td>
+                        <td>{{ asignation.creador }}</td>
                         <td v-if="day > asignation.fecha_limite" bgcolor="red">{{ asignation.fecha_limite }} - caducada
                         </td>
                         <td v-else>{{ asignation.fecha_limite }}</td>
+                        <td>{{ asignation.updated_at.split('T')[0] }}</td>
                         <td>{{ asignation.status }}</td>
                         <td>
                             <b-button
@@ -26,10 +28,11 @@
                                 v-b-tooltip.hover title="Comentarios">
                                 <b-icon icon="chat" scale="2"></b-icon>
                             </b-button>
-                            <b-button @click.prevent="getdate(asignation.prueba, asignation.paciente)"
+                            <b-button v-if="day < asignation.fecha_limite"
+                                @click.prevent="getdate(asignation.prueba, asignation.paciente)"
                                 v-b-modal.modal-prevent-update variant="info" class="rounded-circle px-3"
-                                v-b-tooltip.hover title="Cambiar fecha">
-                                <b-icon icon="calendar2-date" scale="2"></b-icon>
+                                v-b-tooltip.hover title="Contestar asignacion">
+                                <b-icon icon="pencil-square" scale="2"></b-icon>
                             </b-button>
 
                             <b-button @click.prevent="getdate(asignation.prueba, asignation.paciente)"
@@ -91,7 +94,7 @@ import {
     mapState
 } from "vuex";
 export default {
-    name: 'Asignlist',
+    name: 'Asignlist2',
     data() {
         const now = new Date()
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -116,7 +119,7 @@ export default {
     },
     computed: {
         ...mapState({
-            asign: (state) => state.psico.asignaciones,
+            asign: (state) => state.paci.asignaciones,
         }),
     },
     methods: {
@@ -148,7 +151,7 @@ export default {
             let msg = await this.$store.dispatch("psico/updatefecha", this.asign2);
             this.notifyVue("top", "right", msg, 2, 'icon-calendar-60');
             let user = localStorage.getItem('nick')
-            let msg2 = await this.$store.dispatch("psico/getasign", user);
+            let msg2 = await this.$store.dispatch("paci/getasign", user);
             this.$nextTick(() => {
                 this.$bvModal.hide('modal-prevent-update')
             })
@@ -177,7 +180,7 @@ export default {
             console.log(msg)
             this.notifyVue("top", "right", msg, 2, 'icon-chat-33');
             let user = localStorage.getItem('nick')
-            let msg2 = await this.$store.dispatch("psico/getasign", user);
+            let msg2 = await this.$store.dispatch("paci/getasign", user);
         },
         getdate(titulo, paciente) {
             this.asign2.paci = paciente
@@ -229,12 +232,15 @@ export default {
     },
     async beforeMount() {
         let user = localStorage.getItem('nick')
-        let msg = await this.$store.dispatch("psico/getasign", user);
+        let msg = await this.$store.dispatch("paci/getasign", user);
         console.log(msg);
         const now = new Date()
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
         this.day = this.formatDate(today)
         console.log(this.day)
+        if (this.asign.length < 1) {
+            this.notifyVue("top", "right", "No tienes aisgnaciones", 2, 'icon-alert-circle-exc');
+        }
     }
 }
 </script>

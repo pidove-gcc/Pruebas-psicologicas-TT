@@ -240,6 +240,61 @@ export const actions = {
     }
   },
 
+  async updatecomment({ commit, state }, payload) {
+    try {
+      console.log("El contenido  es: ");
+      console.log(payload);
+      const response = await Repository.post(
+        `${apiTT}/upcomment?paci=${payload.paci}&trial=${payload.trial}&chat=${payload.chat}`
+      );
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async updatefecha({ commit, state }, payload) {
+    try {
+      console.log("El contenido  es: ");
+      console.log(payload);
+      const response = await Repository.post(
+        `${apiTT}/upfecha?paci=${payload.paci}&trial=${payload.trial}&date=${payload.date}`
+      );
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async deleteasign({ commit, state }, payload) {
+    try {
+      console.log("El contenido  es: ");
+      console.log(payload);
+      const response = await Repository.post(
+        `${apiTT}/deleteasign?paci=${payload.paci}&trial=${payload.trial}`
+      );
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async deletetrial({ commit, state }, payload) {
+    try {
+      console.log("El contenido  es: ");
+      console.log(payload);
+      const response = await Repository.post(
+        `${apiTT}/deletetrial?trial=${payload}`
+      );
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   async getpsico2({ commit, state }) {
     try {
       const response = await Repository.get(`${apiTT}/psico`);

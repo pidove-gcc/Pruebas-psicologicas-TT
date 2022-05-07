@@ -1,122 +1,125 @@
 <template>
-<div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
-    <notifications></notifications>
-    <side-bar :background-color="sidebarBackground" :short-title="$t('sidebar.shortTitle')" :title="$t('sidebar.title')">
-        <template slot-scope="props" slot="links">
-            <sidebar-item :link="{
-            name: $t('sidebar.dashboard'),
-            icon: 'tim-icons icon-chart-pie-36',
-            path: '/'
-          }">
-            </sidebar-item>
-            <sidebar-item v-if="level == 2" :link="{
-            name: 'Mis pruebas',
-            icon: 'tim-icons icon-paper',
-            path: '/Asign'
-          }">
-            </sidebar-item>
-            <sidebar-item v-if="level == 1" :link="{
-            name: 'Crear prueba',
-            icon: 'tim-icons icon-notes',
-            path: '/Crear'
-          }">
-            </sidebar-item>
-            <sidebar-item v-if="level == 1" :link="{
-            name: 'Mis pruebas',
-            icon: 'tim-icons icon-single-copy-04',
-            path: '/Gestionpruebas'
-          }">
-            </sidebar-item>
-            <sidebar-item v-if="level == 1" :link="{
-            name: 'Asignaciones creadas',
-            icon: 'tim-icons icon-bullet-list-67',
-            path: '/Gestionasign'
-          }">
-            </sidebar-item>
-            <sidebar-item v-if="level == 0" :link="{
-            name: 'Registrar psicologo',
-            icon: 'tim-icons icon-world',
-            path: '/registerpsico'
-          }">
-            </sidebar-item>
-            <sidebar-item v-if="level == 0" :link="{
-            name: 'Gestion de psicologos',
-            icon: 'tim-icons icon-tap-02',
-            path: '/managementpsico'
-          }">
-            </sidebar-item>
-            <sidebar-item v-if="level == 0" :link="{
-            name: 'Gestion de pacientes',
-            icon: 'tim-icons icon-badge',
-            path: '/managementpaci'
-          }">
-            </sidebar-item>
-            <sidebar-item :link="{
-            name: $t('sidebar.icons'),
-            icon: 'tim-icons icon-atom',
-            path: '/icons'
-          }">
-            </sidebar-item>
-            <sidebar-item :link="{
-            name: $t('sidebar.maps'),
-            icon: 'tim-icons icon-pin',
-            path: '/google'
-          }">
-            </sidebar-item>
+    <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
+        <notifications></notifications>
+        <side-bar :background-color="sidebarBackground" :short-title="$t('sidebar.shortTitle')"
+            :title="$t('sidebar.title')">
+            <template slot-scope="props" slot="links">
+                <sidebar-item :link="{
+                    name: $t('sidebar.dashboard'),
+                    icon: 'tim-icons icon-chart-pie-36',
+                    path: '/'
+                }">
+                </sidebar-item>
+                <sidebar-item v-if="level == 2" :link="{
+                    name: 'Mis asignaciones',
+                    icon: 'tim-icons icon-paper',
+                    path: '/Asign'
+                }">
+                </sidebar-item>
+                <sidebar-item v-if="level == 1" :link="{
+                    name: 'Crear prueba',
+                    icon: 'tim-icons icon-notes',
+                    path: '/Crear'
+                }">
+                </sidebar-item>
+                <sidebar-item v-if="level == 1" :link="{
+                    name: 'Mis pruebas',
+                    icon: 'tim-icons icon-single-copy-04',
+                    path: '/Gestionpruebas'
+                }">
+                </sidebar-item>
+                <sidebar-item v-if="level == 1" :link="{
+                    name: 'Asignaciones creadas',
+                    icon: 'tim-icons icon-bullet-list-67',
+                    path: '/Gestionasign'
+                }">
+                </sidebar-item>
+                <sidebar-item v-if="level == 0" :link="{
+                    name: 'Registrar psicologo',
+                    icon: 'tim-icons icon-world',
+                    path: '/registerpsico'
+                }">
+                </sidebar-item>
+                <sidebar-item v-if="level == 0" :link="{
+                    name: 'Gestion de psicologos',
+                    icon: 'tim-icons icon-tap-02',
+                    path: '/managementpsico'
+                }">
+                </sidebar-item>
+                <sidebar-item v-if="level == 0" :link="{
+                    name: 'Gestion de pacientes',
+                    icon: 'tim-icons icon-badge',
+                    path: '/managementpaci'
+                }">
+                </sidebar-item>
+                <sidebar-item :link="{
+                    name: $t('sidebar.icons'),
+                    icon: 'tim-icons icon-atom',
+                    path: '/icons'
+                }">
+                </sidebar-item>
+                <sidebar-item :link="{
+                    name: $t('sidebar.maps'),
+                    icon: 'tim-icons icon-pin',
+                    path: '/google'
+                }">
+                </sidebar-item>
 
-            <sidebar-item :link="{
-            name: $t('sidebar.notifications'),
-            icon: 'tim-icons icon-bell-55',
-            path: '/notifications'
-          }">
-            </sidebar-item>
+                <sidebar-item :link="{
+                    name: $t('sidebar.notifications'),
+                    icon: 'tim-icons icon-bell-55',
+                    path: '/notifications'
+                }">
+                </sidebar-item>
 
-            <sidebar-item :link="{
-            name: $t('sidebar.userProfile'),
-            icon: 'tim-icons icon-single-02',
-            path: '/user' }">
-            </sidebar-item>
+                <sidebar-item :link="{
+                    name: $t('sidebar.userProfile'),
+                    icon: 'tim-icons icon-single-02',
+                    path: '/user'
+                }">
+                </sidebar-item>
 
-            <sidebar-item :link="{
-            name: $t('sidebar.regularTables'),
-            icon: 'tim-icons icon-puzzle-10',
-            path: '/regular'
-          }"></sidebar-item>
+                <sidebar-item :link="{
+                    name: $t('sidebar.regularTables'),
+                    icon: 'tim-icons icon-puzzle-10',
+                    path: '/regular'
+                }"></sidebar-item>
 
-            <sidebar-item :link="{
-            name: $t('sidebar.typography'),
-            icon: 'tim-icons icon-align-center',
-            path: '/typography'
-          }"></sidebar-item>
+                <sidebar-item :link="{
+                    name: $t('sidebar.typography'),
+                    icon: 'tim-icons icon-align-center',
+                    path: '/typography'
+                }"></sidebar-item>
 
-            <sidebar-item :link="{
-            name: $t('sidebar.rtl'),
-            icon: 'tim-icons icon-world',
-            path: localePath('/rtl', 'ar') }"></sidebar-item>
+                <sidebar-item :link="{
+                    name: $t('sidebar.rtl'),
+                    icon: 'tim-icons icon-world',
+                    path: localePath('/rtl', 'ar')
+                }"></sidebar-item>
 
-            <li class="active-pro">
-                <a href="https://www.creative-tim.com/product/nuxt-black-dashboard-pro" target="_blank">
-                    <i class="tim-icons icon-spaceship"></i>
-                    <p>Upgrade to PRO</p>
-                </a>
-            </li>
-        </template>
-    </side-bar>
-    <!--Share plugin (for demo purposes). You can remove it if don't plan on using it-->
-    <sidebar-share :background-color.sync="sidebarBackground"> </sidebar-share>
-    <div class="main-panel" :data="sidebarBackground">
-        <dashboard-navbar></dashboard-navbar>
-        <router-view name="header"></router-view>
+                <li class="active-pro">
+                    <a href="https://www.creative-tim.com/product/nuxt-black-dashboard-pro" target="_blank">
+                        <i class="tim-icons icon-spaceship"></i>
+                        <p>Upgrade to PRO</p>
+                    </a>
+                </li>
+            </template>
+        </side-bar>
+        <!--Share plugin (for demo purposes). You can remove it if don't plan on using it-->
+        <sidebar-share :background-color.sync="sidebarBackground"> </sidebar-share>
+        <div class="main-panel" :data="sidebarBackground">
+            <dashboard-navbar></dashboard-navbar>
+            <router-view name="header"></router-view>
 
-        <div :class="{ content: !isFullScreenRoute }" @click="toggleSidebar">
-            <zoom-center-transition :duration="200" mode="out-in">
-                <!-- your content here -->
-                <nuxt></nuxt>
-            </zoom-center-transition>
+            <div :class="{ content: !isFullScreenRoute }" @click="toggleSidebar">
+                <zoom-center-transition :duration="200" mode="out-in">
+                    <!-- your content here -->
+                    <nuxt></nuxt>
+                </zoom-center-transition>
+            </div>
+            <content-footer v-if="!isFullScreenRoute"></content-footer>
         </div>
-        <content-footer v-if="!isFullScreenRoute"></content-footer>
     </div>
-</div>
 </template>
 
 <script>
@@ -167,7 +170,7 @@ export default {
                 levelps: (state) => state.psico.nivel,
             }),
             sidebarBackground: 'vue',//vue|blue|orange|green|red|primary
-            level : null, 
+            level: null,
         };
     },
     computed: {
@@ -198,7 +201,7 @@ export default {
     },
     mounted() {
         this.initScrollbar();
-        console.log("Tengo el privilegio: " +localStorage.getItem('level'))
+        console.log("Tengo el privilegio: " + localStorage.getItem('level'))
         this.level = localStorage.getItem('level');
     }
 };

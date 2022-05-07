@@ -8,18 +8,22 @@ export const state = () => ({
   foto: null,
   nivel: null,
   listpaci: [],
+  asignaciones: [],
 });
 
 export const mutations = {
   setPaci(state, payload) {
     state.paci = payload;
     console.log("Tengo en el store");
-    localStorage.setItem('nick',payload.nombre_usuario)
+    localStorage.setItem("nick", payload.nombre_usuario);
     console.log(state.paci);
-    const name = payload.nombre + " " + payload.apellidos
-    const prop = payload.proposito
-    localStorage.setItem('usern', name);
-    localStorage.setItem('prop',prop);
+    const name = payload.nombre + " " + payload.apellidos;
+    const prop = payload.proposito;
+    localStorage.setItem("usern", name);
+    localStorage.setItem("prop", prop);
+  },
+  setAsign(state, payload) {
+    state.asignaciones = payload;
   },
   setUser(state, payload) {
     state.username = payload;
@@ -28,23 +32,23 @@ export const mutations = {
   setEmail(state, payload) {
     state.email = payload;
     console.log("Tengo el correo: " + state.email);
-    localStorage.setItem('email', payload);
+    localStorage.setItem("email", payload);
   },
   setFoto(state, payload) {
     state.foto = payload;
     console.log("Tengo la foto");
-    localStorage.setItem('photo', payload);
+    localStorage.setItem("photo", payload);
   },
   setNivel(state, payload) {
     state.nivel = payload;
     console.log("Tengo el nivel: " + state.nivel);
     localStorage.setItem("level", payload);
   },
-  setList(state,payload){
+  setList(state, payload) {
     state.listpaci = payload;
-    console.log("El store tiene")
-    console.log(state.listpaci)
-}
+    console.log("El store tiene");
+    console.log(state.listpaci);
+  },
 };
 
 export const actions = {
@@ -60,7 +64,7 @@ export const actions = {
         return msg;
       } else {
         const data = JSON.parse(JSON.stringify(result.data));
-        const pic = data.img_us_rut + data.img_us
+        const pic = data.img_us_rut + data.img_us;
         commit("setPaci", data);
         commit("setUser", data.nombre_usuario);
         commit("setEmail", data.correo_pac);
@@ -91,9 +95,11 @@ export const actions = {
     }
   },
 
-  async getinfo({commit, state},payload){
+  async getinfo({ commit, state }, payload) {
     try {
-      const response = await Repository.post(`${apiTT}/infopaci?email=${payload}`);
+      const response = await Repository.post(
+        `${apiTT}/infopaci?email=${payload}`
+      );
       const result = JSON.parse(JSON.stringify(response.data.data));
       return result;
     } catch (error) {
@@ -101,11 +107,13 @@ export const actions = {
     }
   },
 
-  async loadimg({commit, state},payload){
+  async loadimg({ commit, state }, payload) {
     try {
-      const response = await Repository.post(`${apiTT}/infopaci?email=${payload}`);
+      const response = await Repository.post(
+        `${apiTT}/infopaci?email=${payload}`
+      );
       const result = JSON.parse(JSON.stringify(response.data.data));
-      const pic = result.img_us_rut + result.img_us
+      const pic = result.img_us_rut + result.img_us;
       commit("setFoto", pic);
       return result;
     } catch (error) {
@@ -113,78 +121,97 @@ export const actions = {
     }
   },
 
-  async update({commit, state},payload){
+  async update({ commit, state }, payload) {
     try {
-      const response = await Repository.post(`${apiTT}/updatepaci?user=${payload.nombre_usuario}&name=${payload.nombre}&lastname=${payload.apellidos}&age=${payload.edad}&gender=${payload.sexo}&home=${payload.domicilio}&prop=${payload.proposito}`);
+      const response = await Repository.post(
+        `${apiTT}/updatepaci?user=${payload.nombre_usuario}&name=${payload.nombre}&lastname=${payload.apellidos}&age=${payload.edad}&gender=${payload.sexo}&home=${payload.domicilio}&prop=${payload.proposito}`
+      );
       const msg = JSON.parse(JSON.stringify(response.data.message));
-      return msg
-    } catch (error) {
-      
-    }
+      return msg;
+    } catch (error) {}
   },
 
-  async updateimg({commit, state},payload){
+  async updateimg({ commit, state }, payload) {
     try {
       var formData = new FormData();
       formData.append("img", payload.img);
-      const response = await Repository.post(`${apiTT}/setpaciimg?user=${payload.user}`,formData);
+      const response = await Repository.post(
+        `${apiTT}/setpaciimg?user=${payload.user}`,
+        formData
+      );
       const msg = JSON.parse(JSON.stringify(response.data.message));
-      return msg
-    } catch (error) {
-      
-    }
+      return msg;
+    } catch (error) {}
   },
 
-  async updatepass({commit, state},payload){
+  async updatepass({ commit, state }, payload) {
     try {
-      console.log("La contraseña sera: " + payload.new)
-      const response = await Repository.post(`${apiTT}/updatepas?email=${payload.email}&pass=${payload.old}&newpass=${payload.new}`);
+      console.log("La contraseña sera: " + payload.new);
+      const response = await Repository.post(
+        `${apiTT}/updatepas?email=${payload.email}&pass=${payload.old}&newpass=${payload.new}`
+      );
       const msg = JSON.parse(JSON.stringify(response.data.message));
-      return msg
-    } catch (error) {
-      
-    }
+      return msg;
+    } catch (error) {}
   },
 
-  async createcode({commit, state},payload){
+  async createcode({ commit, state }, payload) {
     try {
-      console.log("El correo es: " + payload)
-      const response = await Repository.post(`${apiTT}/resetp?email=${payload}`);
+      console.log("El correo es: " + payload);
+      const response = await Repository.post(
+        `${apiTT}/resetp?email=${payload}`
+      );
       const msg = JSON.parse(JSON.stringify(response.data.message));
-      return msg
+      return msg;
     } catch (error) {
       console.log(error);
     }
   },
 
-  async changepass({commit, state},payload){
+  async changepass({ commit, state }, payload) {
     try {
-      console.log("El contenido  es: " + payload)
-      const response = await Repository.post(`${apiTT}/setpasspaci?email=${payload.email}&pass_token=${payload.token}&password=${payload.pass}`);
+      console.log("El contenido  es: " + payload);
+      const response = await Repository.post(
+        `${apiTT}/setpasspaci?email=${payload.email}&pass_token=${payload.token}&password=${payload.pass}`
+      );
       const msg = JSON.parse(JSON.stringify(response.data.message));
-      return msg
+      return msg;
     } catch (error) {
       console.log(error);
     }
   },
 
-  async getpaci({commit, state}){
+  async getpaci({ commit, state }) {
     try {
       const response = await Repository.get(`${apiTT}/paci`);
       const result = JSON.parse(JSON.stringify(response.data.data));
-      commit("setList",result);
+      commit("setList", result);
     } catch (error) {
       console.log(error);
     }
-},
-async getpaci2({commit, state}){
-  try {
-    const response = await Repository.get(`${apiTT}/paci`);
-    const result = JSON.parse(JSON.stringify(response.data.data));
-    commit("setList",result);
-    return result;
-  } catch (error) {
-    console.log(error);
-  }
-}
+  },
+
+  async getasign({ commit, state }, payload) {
+    try {
+      console.log("El contenido  es: " + payload);
+      const response = await Repository.get(`${apiTT}/hw?paci=${payload}`);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      commit("setAsign", result);
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async getpaci2({ commit, state }) {
+    try {
+      const response = await Repository.get(`${apiTT}/paci`);
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      commit("setList", result);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
