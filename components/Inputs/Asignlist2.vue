@@ -1,92 +1,74 @@
 <template>
-    <div class="container">
-        <div class="table-responsive-sm">
-            <table class="table table-hover table-fixed">
-                <thead>
-                    <tr>
-                        <th>Prueba</th>
-                        <th>Asignada por</th>
-                        <th>Fecha limite</th>
-                        <th>Asignada</th>
-                        <th>Status</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="asignation in pageOfItems" :key="asignation.index">
-                        <td>{{ asignation.prueba }}</td>
-                        <td>{{ asignation.creador }}</td>
-                        <td v-if="day > asignation.fecha_limite" bgcolor="red">{{ asignation.fecha_limite }} - caducada
-                        </td>
-                        <td v-else>{{ asignation.fecha_limite }}</td>
-                        <td>{{ asignation.updated_at.split('T')[0] }}</td>
-                        <td>{{ asignation.status }}</td>
-                        <td>
-                            <b-button
-                                @click.prevent="showchat(asignation.coment, asignation.prueba, asignation.paciente)"
-                                v-b-modal.modal-prevent-closing variant="warning" class="rounded-circle px-3 mr-2"
-                                v-b-tooltip.hover title="Comentarios">
-                                <b-icon icon="chat" scale="2"></b-icon>
-                            </b-button>
-                            <b-button v-if="day < asignation.fecha_limite"
-                                @click.prevent="getdate(asignation.prueba, asignation.paciente)"
-                                v-b-modal.modal-prevent-update variant="info" class="rounded-circle px-3"
-                                v-b-tooltip.hover title="Contestar asignacion">
-                                <b-icon icon="pencil-square" scale="2"></b-icon>
-                            </b-button>
+<div class="container">
+    <div class="table-responsive-sm">
+        <table class="table table-hover table-fixed">
+            <thead>
+                <tr>
+                    <th>Prueba</th>
+                    <th>Asignada por</th>
+                    <th>Fecha limite</th>
+                    <th>Asignada</th>
+                    <th>Status</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="asignation in pageOfItems" :key="asignation.index">
+                    <td>{{ asignation.prueba }}</td>
+                    <td>{{ asignation.creador }}</td>
+                    <td v-if="day > asignation.fecha_limite" bgcolor="red">{{ asignation.fecha_limite }} - caducada
+                    </td>
+                    <td v-else>{{ asignation.fecha_limite }}</td>
+                    <td>{{ asignation.updated_at.split('T')[0] }}</td>
+                    <td>{{ asignation.status }}</td>
+                    <td>
+                        <b-button @click.prevent="showchat(asignation.coment, asignation.prueba, asignation.paciente)" v-b-modal.modal-prevent-closing variant="warning" class="rounded-circle px-3 mr-2" v-b-tooltip.hover title="Comentarios">
+                            <b-icon icon="chat" scale="2"></b-icon>
+                        </b-button>
+                        <b-button v-if="day < asignation.fecha_limite" :to="`/Asignament/${asignation.prueba}`"  variant="success" class="rounded-circle px-3" v-b-tooltip.hover title="Contestar asignacion">
+                            <b-icon icon="pencil-square" scale="2">
+                            </b-icon>
+                        </b-button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <footer class="mt-30">
+            <jw-pagination :items="asign" :pageSize="5" @changePage="onChangePage"></jw-pagination>
+        </footer>
 
-                            <b-button @click.prevent="getdate(asignation.prueba, asignation.paciente)"
-                                v-b-modal.modal-prevent-delete variant="danger" class="rounded-circle px-3"
-                                v-b-tooltip.hover title="Eliminar">
-                                <b-icon icon="x-circle" scale="2"></b-icon>
-                            </b-button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <footer class="mt-30">
-                <jw-pagination :items="asign" :pageSize="5" @changePage="onChangePage"></jw-pagination>
-            </footer>
-
-            <b-modal id="modal-prevent-closing" ref="modal" hide-footer :title="titulo" header-bg-variant="default"
-                footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal"
-                @hidden="resetModal">
-                <div v-if="chat == null">
-                    <p>Aun no hay mensajes, envie uno</p>
-                </div>
-                <b-form @submit.stop.prevent="sendmsg">
-                    <div v-for="msg in chat" :key="msg.index">
-                        <b-form-group :label="msg.user">
-                            <b-form-input :placeholder="msg.msg" disabled>
-                            </b-form-input>
-                        </b-form-group>
-                    </div>
-                    <b-form-group>
-                        <b-form-group align="right" label="Enviar nuevo mensaje">
-                            <b-form-input placeholder="Nuevo mensaje" v-model="message" required>
-                            </b-form-input>
-                        </b-form-group>
+        <b-modal id="modal-prevent-closing" ref="modal" hide-footer :title="titulo" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal">
+            <div v-if="chat == null">
+                <p>Aun no hay mensajes, envie uno</p>
+            </div>
+            <b-form @submit.stop.prevent="sendmsg">
+                <div v-for="msg in chat" :key="msg.index">
+                    <b-form-group :label="msg.user">
+                        <b-form-input :placeholder="msg.msg" readonly>
+                        </b-form-input>
                     </b-form-group>
-                    <b-button type="submit">Enviar mensaje</b-button>
-                </b-form>
-
-            </b-modal>
-            <b-modal id="modal-prevent-update" ref="modal2" title="Actualizar fecha" header-bg-variant="default"
-                footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal"
-                @hidden="resetModal" @ok="handleOk">
-                <p align="center">Selecciona una nueva fecha</p>
-                <div align="center">
-                    <b-form-datepicker dark="true" v-model="asign2.date" :min="min" size="sm" style="background: gray"
-                        locale="es"></b-form-datepicker>
                 </div>
-            </b-modal>
+                <b-form-group>
+                    <b-form-group align="right" label="Enviar nuevo mensaje">
+                        <b-form-input placeholder="Nuevo mensaje" v-model="message" required>
+                        </b-form-input>
+                    </b-form-group>
+                </b-form-group>
+                <b-button type="submit">Enviar mensaje</b-button>
+            </b-form>
 
-            <b-modal id="modal-prevent-delete" ref="modal3" title="Borrar asignacion" header-bg-variant="default"
-                footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal"
-                @hidden="resetModal" @ok="handleOkd">¿Deseas borrar esta asignacion?</b-modal>
-            <!-- <p>{{ day }}</p> -->
-        </div>
+        </b-modal>
+        <b-modal id="modal-prevent-update" ref="modal2" title="Actualizar fecha" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOk">
+            <p align="center">Selecciona una nueva fecha</p>
+            <div align="center">
+                <b-form-datepicker dark="true" v-model="asign2.date" :min="min" size="sm" style="background: gray" locale="es"></b-form-datepicker>
+            </div>
+        </b-modal>
+
+        <b-modal id="modal-prevent-delete" ref="modal3" title="Borrar asignacion" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOkd">¿Deseas borrar esta asignacion?</b-modal>
+        <!-- <p>{{ day }}</p> -->
     </div>
+</div>
 </template>
 
 <script>
@@ -239,7 +221,7 @@ export default {
         this.day = this.formatDate(today)
         console.log(this.day)
         if (this.asign.length < 1) {
-            this.notifyVue("top", "right", "No tienes aisgnaciones", 2, 'icon-alert-circle-exc');
+            this.notifyVue("top", "right", "No tienes asignaciones", 2, 'icon-alert-circle-exc');
         }
     }
 }

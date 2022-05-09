@@ -9,6 +9,7 @@ export const state = () => ({
   nivel: null,
   listpaci: [],
   asignaciones: [],
+  asignacion: []
 });
 
 export const mutations = {
@@ -24,6 +25,9 @@ export const mutations = {
   },
   setAsign(state, payload) {
     state.asignaciones = payload;
+  },
+  sethw(state, payload) {
+    state.asignacion = payload;
   },
   setUser(state, payload) {
     state.username = payload;
@@ -198,6 +202,19 @@ export const actions = {
       const msg = JSON.parse(JSON.stringify(response.data.message));
       const result = JSON.parse(JSON.stringify(response.data.data));
       commit("setAsign", result);
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async gethw({ commit, state }, payload) {
+    try {
+      console.log("El contenido  es: " + payload);
+      const response = await Repository.get(`${apiTT}/findtrial?name=${payload}`);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      commit("sethw", result);
       return msg;
     } catch (error) {
       console.log(error);

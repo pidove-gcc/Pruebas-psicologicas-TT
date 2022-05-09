@@ -355,13 +355,15 @@ export default {
                     this.psicoform2.push({
                         pregunta: '',
                         opciones: this.boxoption2.option2,
-                        tipo: 'Positiva'
+                        tipo: 'Positiva',
+                        respuesta:''
                     })
                 } else {
                     this.psicoform2.push({
                         pregunta: '',
                         opciones: this.boxoption2.option1,
-                        tipo: 'Negativa'
+                        tipo: 'Negativa',
+                        respuesta:''
                     })
                 }
 
@@ -370,13 +372,15 @@ export default {
                     this.psicoform2.push({
                         pregunta: '',
                         opciones: this.boxoption2.option3,
-                        tipo: 'Positiva'
+                        tipo: 'Positiva',
+                        respuesta:''
                     })
                 } else {
                     this.psicoform2.push({
                         pregunta: '',
                         opciones: this.boxoption2.option4,
-                        tipo: 'Negativa'
+                        tipo: 'Negativa',
+                        respuesta:''
                     })
                 }
             }
