@@ -3,7 +3,7 @@
         <b-card :title=Titulo>
             <div align="left">
                 <p>Tema y evaluacion de la prueba</p>
-                <b-form-select class="form-control" v-model="typeclasif" align="center" id="questype" style="width: 30%"
+                <b-form-select class="form-control" @change="changetype" v-model="typeclasif" align="center" id="questype" style="width: 30%"
                     required>
                     <template #first>
                         <b-form-select-option :value="null" disabled>Seleccione</b-form-select-option>
@@ -200,6 +200,24 @@ export default {
                 value: '-'
             }
             ],
+            boxtype2: [{
+                text: 'Pegunta para medir ansiedad patológica del paciente',
+                value: 'valorar la ansiedad patológica del paciente'
+            },
+            {
+                text: 'Pregunta para medir sinceridad del paciente',
+                value: 'valorar escala de sinceridad del paciente'
+            }
+            ],
+            boxtype3: [{
+                text: 'Pregunta positiva',
+                value: '+'
+            },
+            {
+                text: 'Pregunta negativa',
+                value: '-'
+            }
+            ],
             boxoption: {
                 option1: ['Totalmente en desacuerdo', 'Ni de acuerdo ni en desacuerdo', 'Totalmente de acuerdo'],
                 option2: ['Totalmente en desacuerdo', 'En desacuerdo', 'Ni de acuerdo ni en desacuerdo', 'De acuerdo', 'Totalmente de acuerdo'],
@@ -301,7 +319,7 @@ export default {
                     value: 2
                 },
                 {
-                    text: 'Frecuentemente',
+                    text: 'Frecuentemente', 
                     value: 3
                 },
                 {
@@ -424,6 +442,14 @@ export default {
         }
     },
     methods: {
+        changetype(){
+            if (this.typeclasif == 'Escala de Ansiedad patológica de J. Grau y cols') {
+                this.boxtype = this.boxtype2
+            }
+            else {
+                this.boxtype = this.boxtype3
+            }
+        },
         addQuestion() {
             if (this.typequest == null) {
                 this.notifyVue("top", "right", "Seleccione una opcion", 4, 'icon-simple-remove');
@@ -563,18 +589,18 @@ export default {
                 }
             }
             else if (this.typeclasif == 'Escala de Ansiedad patológica de J. Grau y cols') {
-                if (this.optiontype == '+') {
+                if (this.optiontype == 'valorar escala de sinceridad del paciente') {
                     this.psicoform2.push({
                         pregunta: '',
                         opciones: this.boxoption3.option3,
-                        tipo: 'Positiva',
+                        tipo: 'valorar escala de sinceridad del paciente',
                         respuesta: ''
                     })
                 } else {
                     this.psicoform2.push({
                         pregunta: '',
                         opciones: this.boxoption3.option3,
-                        tipo: 'Negativa',
+                        tipo: 'valorar la ansiedad patológica del paciente',
                         respuesta: ''
                     })
                 }

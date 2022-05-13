@@ -16,6 +16,9 @@
 </template>
 
 <script>
+import {
+    mapState
+} from "vuex";
 export default {
     name: 'OpenA',
     props: {
@@ -24,15 +27,46 @@ export default {
             default: () => { }
         },
     },
+    computed: {
+        ...mapState({
+            triald: (state) => state.paci.asignacion,
+        })
+    },
     data() {
         return {
             triala: [],
+            anwers: {
+                name: '',
+                paci: '',
+                type: '',
+                clasif: '',
+                trial: '',
+            },
+            type: ["", "info", "success", "warning", "danger"],
         }
     },
     methods: {
-        submit() {
-            alert(JSON.stringify(this.trial))
-        }
+      async  submit() {
+            // alert(JSON.stringify(this.trial))
+            this.anwers.paci = localStorage.getItem('nick')
+            this.anwers.name = this.triald[0].nombre_prueba
+            this.anwers.type = this.triald[0].tipo
+            this.anwers.clasif = this.triald[0].clasif
+            this.anwers.trial = JSON.stringify(this.trial)
+            let msg = await this.$store.dispatch("paci/saveanwers",this.anwers);
+            this.notifyVue("top", "right", msg, 2, 'icon-alert-circle-exc');
+        },
+        notifyVue(verticalAlign, horizontalAlign, msm, color, pic) {
+            // let color = Math.floor(Math.random() * 4 + 1);
+            this.$notify({
+                message: msm,
+                timeout: 3000,
+                icon: "tim-icons " + pic,
+                horizontalAlign: horizontalAlign,
+                verticalAlign: verticalAlign,
+                type: this.type[color],
+            });
+        },
     }
 }
 </script>

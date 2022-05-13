@@ -9,7 +9,7 @@ export const state = () => ({
   nivel: null,
   listpaci: [],
   asignaciones: [],
-  asignacion: []
+  asignacion: [],
 });
 
 export const mutations = {
@@ -211,10 +211,26 @@ export const actions = {
   async gethw({ commit, state }, payload) {
     try {
       console.log("El contenido  es: " + payload);
-      const response = await Repository.get(`${apiTT}/findtrial?name=${payload}`);
+      const response = await Repository.get(
+        `${apiTT}/findtrial?name=${payload}`
+      );
       const msg = JSON.parse(JSON.stringify(response.data.message));
       const result = JSON.parse(JSON.stringify(response.data.data));
       commit("sethw", result);
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async saveanwers({ commit, state }, payload) {
+    try {
+      console.log("El contenido  es: " + payload);
+      const response = await Repository.post(
+        `${apiTT}/saveanwers?name=${payload.name}&&paci=${payload.paci}&&type=${payload.type}&&clasif=${payload.clasif}&&trial=${payload.trial}`
+      );
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      const result = JSON.parse(JSON.stringify(response.data.data));
       return msg;
     } catch (error) {
       console.log(error);
