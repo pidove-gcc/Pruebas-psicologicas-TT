@@ -10,6 +10,7 @@ export const state = () => ({
   listpaci: [],
   asignaciones: [],
   asignacion: [],
+  answ:[],
 });
 
 export const mutations = {
@@ -28,6 +29,9 @@ export const mutations = {
   },
   sethw(state, payload) {
     state.asignacion = payload;
+  },
+  setansw(state, payload) {
+    state.answ = payload;
   },
   setUser(state, payload) {
     state.username = payload;
@@ -222,12 +226,29 @@ export const actions = {
       console.log(error);
     }
   },
+  async getansw({ commit, state }, payload) {
+    try {
+      console.log("El contenido  es: " + payload);
+      const response = await Repository.get(
+        `${apiTT}/findansw?trial=${payload.trial}&&paci=${payload.paci}`
+      );
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      commit("setansw", result);
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
   async saveanwers({ commit, state }, payload) {
     try {
       console.log("El contenido  es: " + payload);
       const response = await Repository.post(
         `${apiTT}/saveanwers?name=${payload.name}&&paci=${payload.paci}&&type=${payload.type}&&clasif=${payload.clasif}&&trial=${payload.trial}`
+      );
+      const response2 = await Repository.post(
+        `${apiTT}/upstatus?trial=${payload.name}&&paci=${payload.paci}`
       );
       const msg = JSON.parse(JSON.stringify(response.data.message));
       const result = JSON.parse(JSON.stringify(response.data.data));

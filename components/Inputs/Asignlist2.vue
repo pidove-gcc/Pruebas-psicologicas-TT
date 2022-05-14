@@ -25,8 +25,12 @@
                         <b-button @click.prevent="showchat(asignation.coment, asignation.prueba, asignation.paciente)" v-b-modal.modal-prevent-closing variant="warning" class="rounded-circle px-3 mr-2" v-b-tooltip.hover title="Comentarios">
                             <b-icon icon="chat" scale="2"></b-icon>
                         </b-button>
-                        <b-button v-if="day < asignation.fecha_limite" :to="`/Asignament/${asignation.prueba}`"  variant="success" class="rounded-circle px-3" v-b-tooltip.hover title="Contestar asignacion">
+                        <b-button v-if="day < asignation.fecha_limite  && asignation.status !='Contestada'" :to="`/Asignament/${asignation.prueba}`"  variant="success" class="rounded-circle px-3" v-b-tooltip.hover title="Contestar asignacion">
                             <b-icon icon="pencil-square" scale="2">
+                            </b-icon>
+                        </b-button>
+                        <b-button v-if="asignation.status =='Contestada'" @click.prevent="createpdf(asignation.prueba)"  variant="danger" class="rounded-circle px-3" v-b-tooltip.hover title="Descargar reporte">
+                            <b-icon icon="file-earmark-arrow-down" scale="2">
                             </b-icon>
                         </b-button>
                     </td>
@@ -96,12 +100,17 @@ export default {
                 trial: '',
                 chat: '',
                 date: '',
+            },
+            sansw: {
+                trial: '',
+                paci:''
             }
         }
     },
     computed: {
         ...mapState({
             asign: (state) => state.paci.asignaciones,
+            answer: (state) => state.paci.answ,
         }),
     },
     methods: {
@@ -184,6 +193,14 @@ export default {
                 console.log(gson)
                 console.log(gson.length)
             }
+        },
+
+      async  createpdf(prueba){
+          this.sansw.trial = prueba
+          this.sansw.paci = localStorage.getItem('nick')
+            let a = await this.$store.dispatch("paci/getansw", this.sansw);
+            let result = this.answer[0]
+            alert(JSON.stringify(result))
         },
         onChangePage(pageOfItems) {
             // update page of items

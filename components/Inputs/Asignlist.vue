@@ -168,7 +168,7 @@ export default {
                 this.chat = []
             }
             this.chat.push({
-                user: this.asign2.paci,
+                user: localStorage.getItem('nick'),
                 msg: this.message
             })
             this.message = ''

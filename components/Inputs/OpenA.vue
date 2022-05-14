@@ -55,6 +55,7 @@ export default {
             this.anwers.trial = JSON.stringify(this.trial)
             let msg = await this.$store.dispatch("paci/saveanwers",this.anwers);
             this.notifyVue("top", "right", msg, 2, 'icon-alert-circle-exc');
+            this.$router.push("/Asign");
         },
         notifyVue(verticalAlign, horizontalAlign, msm, color, pic) {
             // let color = Math.floor(Math.random() * 4 + 1);
