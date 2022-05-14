@@ -1,7 +1,7 @@
 <template>
 <div class="container">
     <div class="table-responsive-sm">
-        <table class="table table-hover table-fixed">
+        <table class="table table-hover table-fixed" >
             <thead>
                 <tr>
                     <th>Prueba</th>
@@ -29,7 +29,7 @@
                             <b-icon icon="pencil-square" scale="2">
                             </b-icon>
                         </b-button>
-                        <b-button v-if="asignation.status =='Contestada'" @click.prevent="createpdf(asignation.prueba)"  variant="danger" class="rounded-circle px-3" v-b-tooltip.hover title="Descargar reporte">
+                        <b-button v-if="asignation.status =='Contestada'" @click.prevent="createpdf(asignation.prueba) "   variant="danger" class="rounded-circle px-3" v-b-tooltip.hover title="Descargar reporte">
                             <b-icon icon="file-earmark-arrow-down" scale="2">
                             </b-icon>
                         </b-button>
@@ -70,23 +70,119 @@
         </b-modal>
 
         <b-modal id="modal-prevent-delete" ref="modal3" title="Borrar asignacion" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOkd">¿Deseas borrar esta asignacion?</b-modal>
+
+<!-- <b-modal id="modal-prevent-answer" hide-footer ref="modalpdf" title="Respuestas" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOk">
+            <div align="center" ref="document">
+                <div v-if="answertype == 'Likert'">
+                    <b-form >
+                        <b-form-input v-model="titulo2" readonly></b-form-input>
+            <div v-for="(question, index) in topdf" :key="index">
+                <b-form-group :label="question.pregunta" label-class="black">
+                    <b-form-radio-group v-model="question.respuesta" :options="question.opciones" disabled>
+                    </b-form-radio-group>
+                </b-form-group>
+            </div>
+            <b-form-textarea v-model="psicoresult" rows="3" plaintext>
+
+            </b-form-textarea>
+        </b-form>
+                </div>
+
+                <div v-if="answertype == 'Pregunta abierta'">
+                    <b-form>
+            <div v-for="(question, index) in topdf" :key="index">
+                <p>{{ question.tipo }}</p>
+                <b-form-group :label="question.pregunta" label-class="black">
+                    <b-form-input v-model="question.respuesta" readonly>
+                    </b-form-input>
+                </b-form-group>
+            </div>
+            <b-form-group label="Resultado">
+                <b-form-textarea v-model="psicoresult" rows="3" readonly>
+            </b-form-textarea>
+            </b-form-group>
+
+        </b-form>
+                </div>
+            </div>
+            <div align="right">
+                <b-button @click="exportToPDF">Descargar reporte</b-button>
+            </div>
+        </b-modal> -->
+ <vue-html2pdf
+        :show-layout="false"
+        :float-layout="true"
+        :enable-download="true"
+        :preview-modal="true"
+        :paginate-elements-by-height="1400"
+        filename="Reportepsico"
+        :pdf-quality="2"
+        :manual-pagination="true"
+        pdf-format="a4"
+        pdf-orientation="landscape"
+        pdf-content-width="800px"
+        ref="html2Pdf"
+    >
+        <section slot="pdf-content">
+            <!-- PDF Content Here -->
+             <div align="center" ref="document">
+                <div v-if="answertype == 'Likert'">
+                <b-form-group :label="titulo2"></b-form-group>
+                    <b-form >
+            <div v-for="(question, index) in topdf" :key="index">
+                <b-form-group :label="question.pregunta" label-class="black">
+                    <b-form-radio-group v-model="question.respuesta" :options="question.opciones" disabled>
+                    </b-form-radio-group>
+                </b-form-group>
+            </div>
+            <b-form-group label="Resultado" align-items="center">
+                <!-- <b-form-textarea v-model="psicoresult" rows="3" plaintext>
+            </b-form-textarea> -->
+            <h2 style="color: black" align="center">{{psicoresult}}</h2>
+            </b-form-group>
+
+        </b-form>
+                </div>
+
+                <div v-if="answertype == 'Pregunta abierta'">
+                    <b-form>
+            <div v-for="(question, index) in topdf" :key="index">
+                <p>{{ question.tipo }}</p>
+                <b-form-group :label="question.pregunta" label-class="black">
+                    <b-form-input v-model="question.respuesta" readonly>
+                    </b-form-input>
+                </b-form-group>
+            </div>
+            <b-form-group label="Resultado" align-items="center">
+                <b-form-textarea v-model="psicoresult" rows="3" plaintext>
+            </b-form-textarea>
+            </b-form-group>
+
+        </b-form>
+                </div>
+            </div>
+        
+        </section>
+    </vue-html2pdf>
         <!-- <p>{{ day }}</p> -->
     </div>
 </div>
 </template>
-
 <script>
 import {
     mapState
 } from "vuex";
+// import html2pdf from 'html2pdf.js'
 export default {
     name: 'Asignlist2',
+    components: {},
     data() {
         const now = new Date()
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
         const minDate = new Date(today)
         return {
             pageOfItems: [],
+            contentpdf: false,
             min: minDate,
             type: ["", "info", "success", "warning", "danger"],
             day: '',
@@ -95,6 +191,10 @@ export default {
             message: '',
             deadline: '',
             titulo: '',
+            titulo2: '',
+            answertype: '',
+            psicoresult: '',
+            topdf: '',
             asign2: {
                 paci: '',
                 trial: '',
@@ -114,6 +214,18 @@ export default {
         }),
     },
     methods: {
+
+        exportToPDF () {
+				// html2pdf(this.$refs.document, {
+				// 	margin: 1,
+				// 	filename: 'Reportepsico.pdf',
+                //     	image: { type: 'jpeg', quality: 0.98 },
+				// 	html2canvas: { dpi: 192, letterRendering: true },
+				// 	jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+				// })
+
+                this.$refs.html2Pdf.generatePdf()
+			},
         resetModal() {
             this.name = ''
             this.nameState = null,
@@ -200,7 +312,12 @@ export default {
           this.sansw.paci = localStorage.getItem('nick')
             let a = await this.$store.dispatch("paci/getansw", this.sansw);
             let result = this.answer[0]
-            alert(JSON.stringify(result))
+            this.titulo2 = "Respuestas de " + result.quien_respondio + " para " + result.nombre_prueba
+            this.answertype = result.tipo
+            this.topdf = JSON.parse(result.reactivos_respuestas)
+            this.psicoresult = result.analisis_tratamiento
+            this.exportToPDF()
+            // alert(JSON.stringify(result))
         },
         onChangePage(pageOfItems) {
             // update page of items
@@ -244,5 +361,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.black {
+    font-weight: bold;
+}
 </style>
