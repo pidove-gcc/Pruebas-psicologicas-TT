@@ -127,7 +127,7 @@
             <!-- PDF Content Here -->
              <div align="center" ref="document">
                 <div v-if="answertype == 'Likert'">
-                <b-form-group :label="titulo2"></b-form-group>
+                <h3 style="color: black" align="center">{{titulo2}}</h3>
                     <b-form >
             <div v-for="(question, index) in topdf" :key="index">
                 <b-form-group :label="question.pregunta" label-class="black">
