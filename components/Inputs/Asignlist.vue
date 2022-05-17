@@ -37,6 +37,11 @@
                                 v-b-tooltip.hover title="Eliminar">
                                 <b-icon icon="x-circle" scale="2"></b-icon>
                             </b-button>
+                            <b-button v-if="asignation.status == 'Contestada' " @click.prevent="editresult(asignation.prueba, asignation.paciente)"
+                                v-b-modal.modal-prevent-answer variant="success" class="rounded-circle px-3"
+                                v-b-tooltip.hover title="Ver resultado">
+                                <b-icon icon="clipboard-check" scale="2"></b-icon>
+                            </b-button>
                         </td>
                     </tr>
                 </tbody>
@@ -82,6 +87,45 @@
                 footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal"
                 @hidden="resetModal" @ok="handleOkd">¿Deseas borrar esta asignacion?</b-modal>
             <!-- <p>{{ day }}</p> -->
+
+            <b-modal id="modal-prevent-answer" hide-footer ref="modalpdf" title="Respuestas" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOk">
+            <div align="center" ref="document">
+                <div v-if="answertype == 'Likert'">
+                    <b-form >
+                        <b-form-input v-model="titulo2" readonly></b-form-input>
+            <div v-for="(question, index) in result" :key="index">
+                <b-form-group :label="question.pregunta" label-class="black">
+                    <b-form-radio-group v-model="question.respuesta" :options="question.opciones" disabled>
+                    </b-form-radio-group>
+                </b-form-group>
+            </div>
+            <b-form-textarea v-model="treatment" rows="3" >
+
+            </b-form-textarea>
+        </b-form>
+                </div>
+
+                <div v-if="answertype == 'Pregunta abierta'">
+                    <b-form>
+            <div v-for="(question, index) in result" :key="index">
+                <p>{{ question.tipo }}</p>
+                <b-form-group :label="question.pregunta" label-class="black">
+                    <b-form-input v-model="question.respuesta" readonly>
+                    </b-form-input>
+                </b-form-group>
+            </div>
+            <b-form-group label="Resultado">
+                <b-form-textarea v-model="treatment" rows="3" >
+            </b-form-textarea>
+            </b-form-group>
+
+        </b-form>
+                </div>
+            </div>
+            <div align="right">
+                <b-button @click="exportToPDF">Actualizar resultado</b-button>
+            </div>
+        </b-modal>
         </div>
     </div>
 </template>
@@ -106,17 +150,27 @@ export default {
             message: '',
             deadline: '',
             titulo: '',
+            titulo2: '',
             asign2: {
                 paci: '',
                 trial: '',
                 chat: '',
                 date: '',
-            }
+            },
+            pacianswer:{
+                trial: '',
+                paci: '',
+
+            },
+            result: null,
+            treatment: '',
+            answertype: '',
         }
     },
     computed: {
         ...mapState({
             asign: (state) => state.psico.asignaciones,
+            answer: (state) => state.paci.answ,
         }),
     },
     methods: {
@@ -124,7 +178,9 @@ export default {
             this.name = ''
             this.nameState = null,
                 this.message = '',
-                this.asign2.date = ''
+                this.asign2.date = '',
+                this.result = null,
+                this.treatment = ''
         },
         handleOk(bvModalEvt) {
             // Prevent modal from closing
@@ -200,6 +256,18 @@ export default {
                 console.log(gson.length)
             }
         },
+
+     async   editresult(prue, paciente){
+            this.pacianswer.trial = prue
+            this.pacianswer.paci = paciente
+            let a = await this.$store.dispatch("paci/getansw", this.pacianswer);
+            let prueba = this.answer[0]
+            this.result = JSON.parse(prueba.reactivos_respuestas)
+            this.titulo2 = "Respuestas de " + prueba.quien_respondio + " para " + prueba.nombre_prueba
+            this.treatment = prueba.analisis_tratamiento
+            this.answertype = prueba.tipo
+        },
+
         onChangePage(pageOfItems) {
             // update page of items
             this.pageOfItems = pageOfItems;
