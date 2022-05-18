@@ -253,6 +253,21 @@ export const actions = {
       console.log(error);
     }
   },
+
+  async updatetreat({ commit, state }, payload) {
+    try {
+      console.log("El contenido  es: ");
+      console.log(payload);
+      const response = await Repository.post(
+        `${apiTT}/edittreat?paci=${payload.paci}&trial=${payload.trial}&result=${payload.treat}`
+      );
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   async updatefecha({ commit, state }, payload) {
     try {
       console.log("El contenido  es: ");

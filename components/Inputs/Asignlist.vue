@@ -92,38 +92,45 @@
             <div align="center" ref="document">
                 <div v-if="answertype == 'Likert'">
                     <b-form >
-                        <b-form-input v-model="titulo2" readonly></b-form-input>
-            <div v-for="(question, index) in result" :key="index">
+                        <b>{{titulo2}}</b>
+            <div v-for="(question, index) in pageOfItems2" :key="index">
                 <b-form-group :label="question.pregunta" label-class="black">
                     <b-form-radio-group v-model="question.respuesta" :options="question.opciones" disabled>
                     </b-form-radio-group>
                 </b-form-group>
             </div>
+             <b>Resultado</b>
             <b-form-textarea v-model="treatment" rows="3" >
 
             </b-form-textarea>
         </b-form>
+        <footer class="mt-30">
+                <jw-pagination :items="result" :pageSize="3" @changePage="onChangePage2"></jw-pagination>
+            </footer>
                 </div>
 
                 <div v-if="answertype == 'Pregunta abierta'">
                     <b-form>
-            <div v-for="(question, index) in result" :key="index">
+                         <b>{{titulo2}}</b>
+            <div v-for="(question, index) in pageOfItems2" :key="index">
                 <p>{{ question.tipo }}</p>
                 <b-form-group :label="question.pregunta" label-class="black">
                     <b-form-input v-model="question.respuesta" readonly>
                     </b-form-input>
                 </b-form-group>
             </div>
-            <b-form-group label="Resultado">
+             <b>Resultado</b>
                 <b-form-textarea v-model="treatment" rows="3" >
             </b-form-textarea>
-            </b-form-group>
-
+            
         </b-form>
+        <footer class="mt-30">
+                <jw-pagination :items="result" :pageSize="3" @changePage="onChangePage2"></jw-pagination>
+            </footer>
                 </div>
             </div>
             <div align="right">
-                <b-button @click="exportToPDF">Actualizar resultado</b-button>
+                <b-button @click="sendresult">Actualizar resultado</b-button>
             </div>
         </b-modal>
         </div>
@@ -142,6 +149,7 @@ export default {
         const minDate = new Date(today)
         return {
             pageOfItems: [],
+            pageOfItems2: [],
             min: minDate,
             type: ["", "info", "success", "warning", "danger"],
             day: '',
@@ -160,7 +168,7 @@ export default {
             pacianswer:{
                 trial: '',
                 paci: '',
-
+                treat: ''
             },
             result: null,
             treatment: '',
@@ -179,8 +187,9 @@ export default {
             this.nameState = null,
                 this.message = '',
                 this.asign2.date = '',
-                this.result = null,
-                this.treatment = ''
+                // this.result = null,
+                this.treatment = '',
+                this.pageOfItems2 = []
         },
         handleOk(bvModalEvt) {
             // Prevent modal from closing
@@ -268,9 +277,23 @@ export default {
             this.answertype = prueba.tipo
         },
 
+        async sendresult(){
+            this.pacianswer.treat = this.treatment
+             let msg = await this.$store.dispatch("psico/updatetreat", this.pacianswer);
+              this.notifyVue("top", "right", msg, 2, 'icon-alert-circle-exc');
+              this.$nextTick(() => {
+                this.$bvModal.hide('modal-prevent-answer')
+            })
+        },
+
         onChangePage(pageOfItems) {
             // update page of items
             this.pageOfItems = pageOfItems;
+            console.log(this.pageOfItems)
+        },
+        onChangePage2(pageOfItems) {
+            // update page of items
+            this.pageOfItems2 = pageOfItems;
             console.log(this.pageOfItems)
         },
         padTo2Digits(num) {

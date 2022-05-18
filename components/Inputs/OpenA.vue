@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <b-form @submit.stop.prevent="submit">
+        <div v-if="triald[0].tipo == 'Likert'">
+            <b-form @submit.stop.prevent="submit">
             <div v-for="(question, index) in trial" :key="index">
                 <p>{{ question.tipo }}</p>
                 <b-form-group :label="question.pregunta" label-class="black">
@@ -12,6 +13,23 @@
                 <b-button type="submit">Enviar respuestas</b-button>
             </div>
         </b-form>
+        </div>
+
+        <div v-if="triald[0].tipo == 'Abierta'">
+            <b-form @submit.stop.prevent="submit">
+            <div v-for="(question, index) in trial" :key="index">
+                <p>{{ question.tipo }}</p>
+                <b-form-group :label="question.pregunta" label-class="black">
+                    <b-form-input v-model="question.respuesta" required>
+                    </b-form-input>
+                </b-form-group>
+            </div>
+            <div align="right">
+                <b-button type="submit">Enviar respuestas</b-button>
+            </div>
+        </b-form>
+        </div>
+        
     </div>
 </template>
 
