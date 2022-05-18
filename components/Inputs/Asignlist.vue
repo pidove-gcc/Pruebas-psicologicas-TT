@@ -109,7 +109,7 @@
             </footer>
                 </div>
 
-                <div v-if="answertype == 'Pregunta abierta'">
+                <div v-if="answertype == 'Abierta'">
                     <b-form>
                          <b>{{titulo2}}</b>
             <div v-for="(question, index) in pageOfItems2" :key="index">

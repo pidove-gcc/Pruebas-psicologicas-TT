@@ -144,18 +144,17 @@
         </b-form>
                 </div>
 
-                <div v-if="answertype == 'Pregunta abierta'">
+                <div v-if="answertype == 'Abierta'">
+                <h3 style="color: black" align="center">{{titulo2}}</h3>
                     <b-form>
             <div v-for="(question, index) in topdf" :key="index">
                 <p>{{ question.tipo }}</p>
                 <b-form-group :label="question.pregunta" label-class="black">
-                    <b-form-input v-model="question.respuesta" readonly>
-                    </b-form-input>
+                    <p style="color: black" align="center">R: {{question.respuesta}}</p>
                 </b-form-group>
             </div>
             <b-form-group label="Resultado" align-items="center">
-                <b-form-textarea v-model="psicoresult" rows="3" plaintext>
-            </b-form-textarea>
+                 <h2 style="color: black" align="center">{{psicoresult}}</h2>
             </b-form-group>
 
         </b-form>

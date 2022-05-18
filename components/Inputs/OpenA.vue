@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div v-if="triald[0].tipo == 'Likert'">
+        <div v-if="trialtype == 'Likert'">
             <b-form @submit.stop.prevent="submit">
             <div v-for="(question, index) in trial" :key="index">
                 <p>{{ question.tipo }}</p>
@@ -15,7 +15,7 @@
         </b-form>
         </div>
 
-        <div v-if="triald[0].tipo == 'Abierta'">
+        <div v-if="trialtype == 'Abierta'">
             <b-form @submit.stop.prevent="submit">
             <div v-for="(question, index) in trial" :key="index">
                 <p>{{ question.tipo }}</p>
@@ -53,6 +53,7 @@ export default {
     data() {
         return {
             triala: [],
+            trialtype: '',
             anwers: {
                 name: '',
                 paci: '',
@@ -71,7 +72,13 @@ export default {
             this.anwers.type = this.triald[0].tipo
             this.anwers.clasif = this.triald[0].clasif
             this.anwers.trial = JSON.stringify(this.trial)
-            let msg = await this.$store.dispatch("paci/saveanwers",this.anwers);
+            if (this.trialtype == 'Likert') {
+                
+                const msg = await this.$store.dispatch("paci/saveanwers",this.anwers);
+            }
+            else{
+                 const msg = await this.$store.dispatch("paci/saveanwersa",this.anwers);
+            }
             this.notifyVue("top", "right", msg, 2, 'icon-alert-circle-exc');
             this.$router.push("/Asign");
         },
@@ -86,6 +93,9 @@ export default {
                 type: this.type[color],
             });
         },
+    },
+    async beforeMount() {
+        this.trialtype = this.triald[0].tipo
     }
 }
 </script>

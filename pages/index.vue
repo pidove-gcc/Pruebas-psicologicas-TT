@@ -2,7 +2,7 @@
   <div class="row">
     <!-- Big Chart -->
     <div class="col-12">
-      <card type="chart">
+      <!-- <card type="chart">
         <template slot="header">
           <div class="row">
             <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
@@ -49,6 +49,55 @@
           >
           </line-chart>
         </div>
+      </card> -->
+
+      <card type="chart">
+        <template slot="header">
+          <div class="row">
+            <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
+              <h5 class="card-category">Asignaciones</h5>
+              <h2 class="card-title">Por mes</h2>
+            </div>
+            <div class="col-sm-6 d-flex d-sm-block">
+              <!-- <div
+                class="btn-group btn-group-toggle"
+                :class="isRTL ? 'float-left' : 'float-right'"
+                data-toggle="buttons"
+              >
+                <label
+                  v-for="(option, index) in bigLineChartCategories"
+                  :key="option.name"
+                  class="btn btn-sm btn-primary btn-simple"
+                  :class="{ active: bigLineChart.activeIndex === index }"
+                  :id="index"
+                >
+                  <input
+                    type="radio"
+                    @click="initBigChart(index)"
+                    name="options"
+                    autocomplete="off"
+                    :checked="bigLineChart.activeIndex === index"
+                  />
+                  <span class="d-none d-sm-block">{{ option.name }}</span>
+                  <span class="d-block d-sm-none">
+                    <i :class="option.icon"></i>
+                  </span>
+                </label>
+              </div> -->
+            </div>
+          </div>
+        </template>
+        <div class="chart-area">
+          <line-chart
+            style="height: 100%"
+            ref="bigChart"
+            :chart-data="bigLineChart.chartData"
+            :gradient-colors="bigLineChart.gradientColors"
+            :gradient-stops="bigLineChart.gradientStops"
+            :extra-options="bigLineChart.extraOptions"
+          >
+          </line-chart>
+        </div>
       </card>
     </div>
 
@@ -56,8 +105,35 @@
     <div class="col-lg-4" :class="{ 'text-right': isRTL }">
       <card type="chart">
         <template slot="header">
-          <h5 class="card-category">Total Shipments</h5>
+          <h5 class="card-category">Tipos de pruebas creadas</h5>
           <h3 class="card-title">
+             <!-- <div class="col-sm-6 d-flex d-sm-block">
+              <div
+                class="btn-group btn-group-toggle"
+                :class="isRTL ? 'float-left' : 'float-right'"
+                data-toggle="buttons"
+              >
+                <label
+                  v-for="(option, index) in bigLineChartCategories"
+                  :key="option.name"
+                  class="btn btn-sm btn-primary btn-simple"
+                  :class="{ active: bigLineChart.activeIndex === index }"
+                  :id="index"
+                >
+                  <input
+                    type="radio"
+                    @click="settype(index)"
+                    name="options"
+                    autocomplete="off"
+                    :checked="bigLineChart.activeIndex === index"
+                  />
+                  <span class="d-none d-sm-block">{{ option.name }}</span>
+                  <span class="d-block d-sm-none">
+                    <i :class="option.icon"></i>
+                  </span>
+                </label>
+              </div>
+            </div> -->
             <i class="tim-icons icon-bell-55 text-primary"></i> 763,215
           </h3>
         </template>
@@ -176,25 +252,28 @@ import * as chartConfigs from "@/components/Charts/config";
 import TaskList from "@/components/Dashboard/TaskList";
 import config from "@/config";
 import { Table, TableColumn } from "element-ui";
+import {
+    mapState
+} from "vuex";
 
 let bigChartData = [
-  [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
+  [0, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
   [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
   [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130],
 ];
 let bigChartLabels = [
-  "JAN",
+  "ENE",
   "FEB",
   "MAR",
-  "APR",
+  "ABR",
   "MAY",
   "JUN",
   "JUL",
-  "AUG",
+  "AGO",
   "SEP",
   "OCT",
   "NOV",
-  "DEC",
+  "DIC",
 ];
 let bigChartDatasetOptions = {
   fill: true,
@@ -266,7 +345,7 @@ export default {
           datasets: [
             {
               ...bigChartDatasetOptions,
-              data: bigChartData[0],
+              data: this.asignmonth,
             },
           ],
           labels: bigChartLabels,
@@ -331,6 +410,7 @@ export default {
           "rgba(66,134,121,0)",
         ],
         gradientStops: [1, 0.4, 0],
+        
       },
       blueBarChart: {
         extraOptions: chartConfigs.barChartOptions,
@@ -351,9 +431,15 @@ export default {
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.4, 0],
       },
+      asignmonth: [[0,0,0,0,0,0,0,0,0,0,0,0]]
     };
   },
   computed: {
+    ...mapState({
+            infoa: (state) => state.psico.infoasignaciones,
+             pruebas: (state) => state.psico.pruebas,
+        }),
+
     enableRTL() {
       return this.$route.query.enableRTL;
     },
@@ -377,7 +463,7 @@ export default {
         datasets: [
           {
             ...bigChartDatasetOptions,
-            data: bigChartData[index],
+            data: this.asignmonth[index],
           },
         ],
         labels: bigChartLabels,
@@ -385,10 +471,47 @@ export default {
       this.$refs.bigChart.updateGradients(chartData);
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
+      console.log('Pase esto a la grafica')
+      console.log(chartData.datasets[0].data)
     },
+    settype(index){
+      console.log(index)
+      this.bigLineChart.activeIndex = index;
+    }
   },
   mounted() {
+    // this.initBigChart(0);
+    
+  },
+ async beforeMount() {
+    let msg = await this.$store.dispatch("psico/infoasign",localStorage.getItem('nick'));
+     let user = localStorage.getItem('nick')
+            let msg2 = await this.$store.dispatch("psico/getprueba", user);
+    console.log("Tengo estas asignacines")
+    console.log(this.infoa)
+    const datos = bigChartData[0]
+    for (let index = 0; index < this.infoa.length; index++) {
+      // console.log(this.infoa[index].fecha_limite )
+      let month = this.infoa[index].fecha_limite.split('-')
+      if (month[1].substr(0,1) == "0")
+{
+  console.log(month[1].substr(1))
+  this.asignmonth[0][(month[1].substr(1))-1] = this.asignmonth[0][(month[1].substr(1))-1] + 1
+  console.log("Le sume 1")
+}
+else{
+  console.log(month[1])
+  // console.log(datos[month[1].substr(1)])
+  this.asignmonth[0][(month[1].substr(1))-1] = this.asignmonth[0][(month[1].substr(1))-1] + 1
+  console.log("Le sume 1")
+}
+    }
+    console.log('Tengo esto')
+    console.log(this.asignmonth[0])
+    // asignmonth
     this.initBigChart(0);
+
+    // this.pruebas
   },
 };
 </script>

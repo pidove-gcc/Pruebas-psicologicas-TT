@@ -10,6 +10,7 @@ export const state = () => ({
   nivel: null,
   pruebas: [],
   asignaciones: [],
+  infoasignaciones: [],
 });
 
 export const mutations = {
@@ -28,6 +29,9 @@ export const mutations = {
   },
   setAsign(state, payload) {
     state.asignaciones = payload;
+  },
+  setInfo(state, payload) {
+    state.infoasignaciones = payload;
   },
   setPruebas(state, payload) {
     state.pruebas = payload;
@@ -234,6 +238,21 @@ export const actions = {
       const msg = JSON.parse(JSON.stringify(response.data.message));
       const result = JSON.parse(JSON.stringify(response.data.data));
       commit("setAsign", result);
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async infoasign({ commit, state }, payload) {
+    try {
+      console.log("El contenido  es: " + payload);
+      const response = await Repository.get(
+        `${apiTT}/asignpsico?psico=${payload}`
+      );
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      commit("setInfo", result);
       return msg;
     } catch (error) {
       console.log(error);

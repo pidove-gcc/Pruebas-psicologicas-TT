@@ -10,7 +10,7 @@ export const state = () => ({
   listpaci: [],
   asignaciones: [],
   asignacion: [],
-  answ:[],
+  answ: [],
 });
 
 export const mutations = {
@@ -246,6 +246,23 @@ export const actions = {
       console.log("El contenido  es: " + payload);
       const response = await Repository.post(
         `${apiTT}/saveanwers?name=${payload.name}&&paci=${payload.paci}&&type=${payload.type}&&clasif=${payload.clasif}&&trial=${payload.trial}`
+      );
+      const response2 = await Repository.post(
+        `${apiTT}/upstatus?trial=${payload.name}&&paci=${payload.paci}`
+      );
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async saveanwersa({ commit, state }, payload) {
+    try {
+      console.log("El contenido  es: " + payload);
+      const response = await Repository.post(
+        `${apiTT}/saveanwersa?name=${payload.name}&&paci=${payload.paci}&&type=${payload.type}&&clasif=${payload.clasif}&&trial=${payload.trial}`
       );
       const response2 = await Repository.post(
         `${apiTT}/upstatus?trial=${payload.name}&&paci=${payload.paci}`
