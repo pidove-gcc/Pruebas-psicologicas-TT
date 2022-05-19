@@ -11,6 +11,7 @@ export const state = () => ({
   pruebas: [],
   asignaciones: [],
   infoasignaciones: [],
+  pacilist: [],
 });
 
 export const mutations = {
@@ -29,6 +30,9 @@ export const mutations = {
   },
   setAsign(state, payload) {
     state.asignaciones = payload;
+  },
+  setPacilist(state, payload) {
+    state.pacilist = payload;
   },
   setInfo(state, payload) {
     state.infoasignaciones = payload;
@@ -253,6 +257,21 @@ export const actions = {
       const msg = JSON.parse(JSON.stringify(response.data.message));
       const result = JSON.parse(JSON.stringify(response.data.data));
       commit("setInfo", result);
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async listpaci({ commit, state }, payload) {
+    try {
+      console.log("El contenido  es: " + payload);
+      const response = await Repository.get(
+        `${apiTT}/pacipsicolist?psico=${payload}`
+      );
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      commit("setPacilist", result);
       return msg;
     } catch (error) {
       console.log(error);

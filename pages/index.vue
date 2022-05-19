@@ -1,5 +1,6 @@
 <template>
-  <div class="row">
+<div class="container">
+  <div v-if="level == 1" class="row">
     <!-- Big Chart -->
     <div class="col-12">
       <!-- <card type="chart">
@@ -100,14 +101,113 @@
         </div>
       </card>
     </div>
+    <div class="col-12">
+      <!-- <card type="chart">
+        <template slot="header">
+          <div class="row">
+            <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
+              <h5 class="card-category">Total shipments</h5>
+              <h2 class="card-title">Performance</h2>
+            </div>
+            <div class="col-sm-6 d-flex d-sm-block">
+              <div
+                class="btn-group btn-group-toggle"
+                :class="isRTL ? 'float-left' : 'float-right'"
+                data-toggle="buttons"
+              >
+                <label
+                  v-for="(option, index) in bigLineChartCategories"
+                  :key="option.name"
+                  class="btn btn-sm btn-primary btn-simple"
+                  :class="{ active: bigLineChart.activeIndex === index }"
+                  :id="index"
+                >
+                  <input
+                    type="radio"
+                    @click="initBigChart(index)"
+                    name="options"
+                    autocomplete="off"
+                    :checked="bigLineChart.activeIndex === index"
+                  />
+                  <span class="d-none d-sm-block">{{ option.name }}</span>
+                  <span class="d-block d-sm-none">
+                    <i :class="option.icon"></i>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </template>
+        <div class="chart-area">
+          <line-chart
+            style="height: 100%"
+            ref="bigChart"
+            :chart-data="bigLineChart.chartData"
+            :gradient-colors="bigLineChart.gradientColors"
+            :gradient-stops="bigLineChart.gradientStops"
+            :extra-options="bigLineChart.extraOptions"
+          >
+          </line-chart>
+        </div>
+      </card> -->
+
+      <card type="chart">
+        <template slot="header">
+          <div class="row">
+            <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
+             <h5 class="card-category">Tipos de pruebas creadas</h5>
+          <h3 class="card-title">
+            <i class="tim-icons icon-delivery-fast text-info"></i> {{canttrial}}
+          </h3>
+            </div>
+            <div class="col-sm-6 d-flex d-sm-block">
+              <!-- <div
+                class="btn-group btn-group-toggle"
+                :class="isRTL ? 'float-left' : 'float-right'"
+                data-toggle="buttons"
+              >
+                <label
+                  v-for="(option, index) in bigLineChartCategories"
+                  :key="option.name"
+                  class="btn btn-sm btn-primary btn-simple"
+                  :class="{ active: bigLineChart.activeIndex === index }"
+                  :id="index"
+                >
+                  <input
+                    type="radio"
+                    @click="initBigChart(index)"
+                    name="options"
+                    autocomplete="off"
+                    :checked="bigLineChart.activeIndex === index"
+                  />
+                  <span class="d-none d-sm-block">{{ option.name }}</span>
+                  <span class="d-block d-sm-none">
+                    <i :class="option.icon"></i>
+                  </span>
+                </label>
+              </div> -->
+            </div>
+          </div>
+        </template>
+        <div class="chart-area">
+          <bar-chart
+            style="height: 100%"
+            :chart-data="blueBarChart.chartData"
+            :gradient-stops="blueBarChart.gradientStops"
+            :extra-options="blueBarChart.extraOptions"
+          >
+          </bar-chart>
+        </div>
+      </card>
+    </div>
 
     <!-- Small charts -->
-    <div class="col-lg-4" :class="{ 'text-right': isRTL }">
+    <!-- <div class="col-lg-4" :class="{ 'text-right': isRTL }">
       <card type="chart">
         <template slot="header">
           <h5 class="card-category">Tipos de pruebas creadas</h5>
           <h3 class="card-title">
-             <!-- <div class="col-sm-6 d-flex d-sm-block">
+             <div class="col-sm-6 d-flex d-sm-block">
               <div
                 class="btn-group btn-group-toggle"
                 :class="isRTL ? 'float-left' : 'float-right'"
@@ -133,7 +233,7 @@
                   </span>
                 </label>
               </div>
-            </div> -->
+            </div>
             <i class="tim-icons icon-bell-55 text-primary"></i> 763,215
           </h3>
         </template>
@@ -148,13 +248,14 @@
           </line-chart>
         </div>
       </card>
-    </div>
-    <div class="col-lg-4" :class="{ 'text-right': isRTL }">
+    </div> -->
+    <!-- Grafica pequeña -->
+    <!-- <div class="col-lg-4" :class="{ 'text-right': isRTL }">
       <card type="chart">
         <template slot="header">
-          <h5 class="card-category">Daily Sales</h5>
+          <h5 class="card-category">Tipos de pruebas creadas</h5>
           <h3 class="card-title">
-            <i class="tim-icons icon-delivery-fast text-info"></i> 3,500€
+            <i class="tim-icons icon-delivery-fast text-info"></i> {{canttrial}}
           </h3>
         </template>
         <div class="chart-area">
@@ -167,8 +268,28 @@
           </bar-chart>
         </div>
       </card>
-    </div>
+    </div> -->
     <div class="col-lg-4" :class="{ 'text-right': isRTL }">
+      <card type="chart">
+        <template slot="header">
+          <h5 class="card-category">Pacientes asignados</h5>
+          <h3 class="card-title">
+            <i class="tim-icons icon-delivery-fast text-info"></i> {{cantpaci}}
+          </h3>
+        </template>
+        <div class="chart-area">
+          <bar-chart
+            style="height: 100%"
+            :chart-data="blueBarChart2.chartData"
+            :gradient-stops="blueBarChart2.gradientStops"
+            :extra-options="blueBarChart2.extraOptions"
+          >
+          </bar-chart>
+        </div>
+      </card>
+    </div>
+    <!-- Grafica pequeña -->
+    <!-- <div class="col-lg-4" :class="{ 'text-right': isRTL }">
       <card type="chart">
         <template slot="header">
           <h5 class="card-category">Completed tasks</h5>
@@ -186,8 +307,9 @@
           </line-chart>
         </div>
       </card>
-    </div>
-    <div class="col-lg-5">
+    </div> -->
+<!-- to do list -->
+    <!-- <div class="col-lg-5">
       <card type="tasks" :header-classes="{ 'text-right': isRTL }">
         <template slot="header" class="d-inline">
           <h6 class="title d-inline">Tasks (5)</h6>
@@ -209,8 +331,9 @@
           <task-list></task-list>
         </div>
       </card>
-    </div>
-    <div class="col-lg-7">
+    </div> -->
+<!-- table -->
+    <!-- <div class="col-lg-7">
       <card card-body-classes="table-full-width">
         <h4 slot="header" class="card-title">Striped table</h4>
         <el-table :data="tableData">
@@ -242,7 +365,14 @@
           ></el-table-column>
         </el-table>
       </card>
+    </div> -->
+
+  </div>
+  <div v-else>
+    <div align="center">
+      <h3>Bienvenido</h3>
     </div>
+  </div>
   </div>
 </template>
 <script>
@@ -302,6 +432,13 @@ export default {
   },
   data() {
     return {
+      level: '',
+      typetrial:[],
+      countrial: [],
+      typegen: [],
+      countgen: [],
+      canttrial: '',
+      cantpaci: '',
       tableData: [
         {
           id: 1,
@@ -415,6 +552,25 @@ export default {
       blueBarChart: {
         extraOptions: chartConfigs.barChartOptions,
         chartData: {
+         labels: ["USA", "GER", "asaaaaaaaaaaaaaaaaaaaa"],
+          datasets: [
+            {
+              label: "Creadas",
+              fill: true,
+              borderColor: config.colors.info,
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              data: this.countrial,
+            },
+          ],
+        },
+        gradientColors: config.colors.primaryGradient,
+        gradientStops: [1, 0.4, 0],
+      },
+      blueBarChart2: {
+        extraOptions: chartConfigs.barChartOptions,
+        chartData: {
           labels: ["USA", "GER", "AUS", "UK", "RO", "BR"],
           datasets: [
             {
@@ -438,6 +594,7 @@ export default {
     ...mapState({
             infoa: (state) => state.psico.infoasignaciones,
              pruebas: (state) => state.psico.pruebas,
+             listapaci: (state) => state.psico.pacilist,
         }),
 
     enableRTL() {
@@ -484,9 +641,13 @@ export default {
     
   },
  async beforeMount() {
-    let msg = await this.$store.dispatch("psico/infoasign",localStorage.getItem('nick'));
+    this.level = localStorage.getItem('level');
+    if(this.level == 1){
+      let msg = await this.$store.dispatch("psico/infoasign",localStorage.getItem('nick'));
      let user = localStorage.getItem('nick')
             let msg2 = await this.$store.dispatch("psico/getprueba", user);
+     let user2 = localStorage.getItem('nick')
+            let msg3 = await this.$store.dispatch("psico/listpaci", user);
     console.log("Tengo estas asignacines")
     console.log(this.infoa)
     const datos = bigChartData[0]
@@ -510,8 +671,72 @@ else{
     console.log(this.asignmonth[0])
     // asignmonth
     this.initBigChart(0);
-
+    console.log("El psicologo tiene estas")
+    console.log(this.pruebas)
+    this.canttrial = this.pruebas.length
+    for (let index = 0; index < this.pruebas.length; index++) {
+      if (this.typetrial.indexOf(this.pruebas[index].clasif) === -1) {
+        this.typetrial.push(this.pruebas[index].clasif);
+        this.countrial.push(1)
+        console.log('El array es: ' + this.typetrial);
+    } else if (this.typetrial.indexOf(this.pruebas[index].clasif) > -1) {
+        console.log(this.pruebas[index].clasif + ' ya existe en la colección.');
+        this.countrial[this.typetrial.indexOf(this.pruebas[index].clasif)]++
+    }      
+    }
+    this.cantpaci = this.listapaci.length
+    for (let index = 0; index < this.listapaci.length; index++) {
+      if (this.typegen.indexOf(this.listapaci[index].sexo) === -1) {
+        this.typegen.push(this.listapaci[index].sexo);
+        this.countgen.push(1)
+        console.log('El array es: ' + this.typegen);
+    } else if (this.typegen.indexOf(this.listapaci[index].sexo) > -1) {
+        console.log(this.listapaci[index].sexo + ' ya existe en la colección.');
+        this.countgen[this.typegen.indexOf(this.listapaci[index].sexo)]++
+    }      
+    }
+    console.log(this.countrial)
+//     this.blueBarChart.chartData.labels = this.typetrial
+// this.blueBarChart.chartData.datasets[0].data = this.countrial
+console.log(this.blueBarChart.chartData.labels)
+console.log(this.blueBarChart.chartData.datasets[0].data)
+let  chartData= {
+         labels: this.typetrial,
+          datasets: [
+            {
+              label: "Creadas",
+              fill: true,
+              borderColor: config.colors.info,
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              data: this.countrial,
+            },
+          ],
+        }
+let  chartData2= {
+         labels: this.typegen,
+          datasets: [
+            {
+              label: "Registrados",
+              fill: true,
+              borderColor: config.colors.info,
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              data: this.countgen,
+            },
+          ],
+        }
+         this.blueBarChart.chartData = chartData;
+         this.blueBarChart2.chartData = chartData2;
+         
+    // console.log(this.typetrial)
+    // this.typetrial.push('prueba2')
+    // console.log(this.typetrial)
     // this.pruebas
+    }
+    
   },
 };
 </script>
