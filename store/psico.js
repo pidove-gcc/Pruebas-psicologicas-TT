@@ -96,6 +96,20 @@ export const actions = {
     }
   },
 
+  setinfoinv({ commit, state }, payload) {
+    try {
+      const data = "invitado";
+      commit("setPsico", "Invitado");
+      commit("setUser", "Invitado");
+      commit("setEmail", "invitado");
+      commit("setNivel", 3);
+      console.log("Datos del psicologo:");
+      return "Sesion de invitado iniciada";
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   async getpsico({ commit, state }) {
     try {
       const response = await Repository.get(`${apiTT}/psico`);

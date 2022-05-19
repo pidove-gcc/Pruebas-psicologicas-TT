@@ -33,7 +33,7 @@
             <div>
                 <label class="button text-primary" @click="setform">{{ text }}</label>
             </div>
-            <b-button @click="starsession('invitado')">Ingresar como invitado</b-button>
+            <b-button @click="starsessioninv('invitado')">Ingresar como invitado</b-button>
         </b-card>
     </div>
     <div v-else align="center" class="mt-5 col-md-5 border border-primary">
@@ -250,6 +250,15 @@ export default {
                 }
             }
 
+        },
+
+        async starsessioninv(user) {
+            let msg = await this.$store.dispatch("psico/setinfoinv");
+                this.$store.dispatch("user/setAuth", true);
+                console.log("Ya te voy a redirigir")
+                this.$router.push("/");
+                this.notifyVue("top", "right", msg, 2, 'icon-satisfied');
+             
         },
         async selectUser() {
             console.log("Inicio consulta");

@@ -75,12 +75,16 @@ export default {
             if (this.trialtype == 'Likert') {
                 
                 const msg = await this.$store.dispatch("paci/saveanwers",this.anwers);
+                 this.notifyVue("top", "right", msg, 2, 'icon-alert-circle-exc');
+            this.$router.push("/Asign");
             }
             else{
                  const msg = await this.$store.dispatch("paci/saveanwersa",this.anwers);
-            }
-            this.notifyVue("top", "right", msg, 2, 'icon-alert-circle-exc');
+                  this.notifyVue("top", "right", msg, 2, 'icon-alert-circle-exc');
             this.$router.push("/Asign");
+            }
+            // this.notifyVue("top", "right", msg, 2, 'icon-alert-circle-exc');
+            // this.$router.push("/Asign");
         },
         notifyVue(verticalAlign, horizontalAlign, msm, color, pic) {
             // let color = Math.floor(Math.random() * 4 + 1);

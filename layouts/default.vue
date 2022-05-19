@@ -5,7 +5,7 @@
             :title="$t('sidebar.title')">
             <template slot-scope="props" slot="links">
                 <sidebar-item :link="{
-                    name: $t('sidebar.dashboard'),
+                    name: 'Inicio',
                     icon: 'tim-icons icon-chart-pie-36',
                     path: '/'
                 }">
@@ -50,6 +50,12 @@
                     name: 'Gestion de pacientes',
                     icon: 'tim-icons icon-badge',
                     path: '/managementpaci'
+                }">
+                </sidebar-item>
+                <sidebar-item v-if="level == 3" :link="{
+                    name: 'pruebas disponibles',
+                    icon: 'tim-icons icon-badge',
+                    path: '/Asignvisit'
                 }">
                 </sidebar-item>
                 <sidebar-item :link="{
@@ -117,7 +123,7 @@
                     <nuxt></nuxt>
                 </zoom-center-transition>
             </div>
-            <content-footer v-if="!isFullScreenRoute"></content-footer>
+            <!-- <content-footer v-if="!isFullScreenRoute"></content-footer> -->
         </div>
     </div>
 </template>

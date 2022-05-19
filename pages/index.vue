@@ -157,7 +157,7 @@
             <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
              <h5 class="card-category">Tipos de pruebas creadas</h5>
           <h3 class="card-title">
-            <i class="tim-icons icon-delivery-fast text-info"></i> {{canttrial}}
+            <i class="tim-icons icon-notes text-info"></i> {{canttrial}}
           </h3>
             </div>
             <div class="col-sm-6 d-flex d-sm-block">
@@ -274,7 +274,7 @@
         <template slot="header">
           <h5 class="card-category">Pacientes asignados</h5>
           <h3 class="card-title">
-            <i class="tim-icons icon-delivery-fast text-info"></i> {{cantpaci}}
+            <i class="tim-icons icon-single-02 text-info"></i> {{cantpaci}}
           </h3>
         </template>
         <div class="chart-area">
@@ -368,9 +368,15 @@
     </div> -->
 
   </div>
-  <div v-else>
+  <div v-if="level == 2 || level == 0">
     <div align="center">
       <h3>Bienvenido</h3>
+    </div>
+  </div>
+  <div v-if="level == 3">
+    <div align="center">
+      <h3>Bienvenido</h3>
+      <p>Iniciaste sesion como invitado, por lo que solo podras realizar las pruebas que evalua el sistema sin intervencion de algun psicologo, asi mismo, tus respuestas no seran almacenadas, si deseas seguimiento por favor registraste</p>
     </div>
   </div>
   </div>
