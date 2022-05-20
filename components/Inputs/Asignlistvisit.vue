@@ -24,7 +24,7 @@
             </tbody>
         </table>
         <footer class="mt-30">
-            <jw-pagination :items="trial" :pageSize="5" @changePage="onChangePage"></jw-pagination>
+            <jw-pagination :items="trial" :pageSize="5" :labels="customLabels"  @changePage="onChangePage"></jw-pagination>
         </footer>
 
         <b-modal id="modal-prevent-closing" ref="modal" hide-footer :title="titulo" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal">
@@ -62,7 +62,7 @@
                         <b-button type="submit">Enviar respuestas</b-button>
                     </b-form>
                     <footer class="mt-30">
-                        <jw-pagination :items="topdf" :pageSize="3" @changePage="onChangePage2"></jw-pagination>
+                        <jw-pagination :items="topdf" :pageSize="3" :labels="customLabels" @changePage="onChangePage2"></jw-pagination>
                     </footer>
                 </div>
             </div>
@@ -163,7 +163,13 @@ export default {
                 type: '',
                 clasif: '',
                 trial: ''
-            }
+            },
+            customLabels: {
+                first: 'Primero',
+                last: 'Ultimo',
+                previous: 'Anterior',
+                next: 'Siguiente'
+            },
         }
     },
     computed: {

@@ -1,9 +1,10 @@
 <template>
   <div class="sidebar" :data="backgroundColor">
     <div class="sidebar-wrapper" ref="sidebarScrollArea">
-      <div class="logo">
-        <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-          <img :src="logo" alt="app-logo" />
+      <div class="logo" >
+        <a href="/" class="simple-text logo-mini" >
+          <!-- <a href="http://www.creative-tim.com" class="simple-text logo-mini"></a> -->
+          <img :src="logo" alt="app-logo" style="background:black" />
         </a>
         <a href="http://www.creative-tim.com" class="simple-text logo-normal">
           {{ Anoun }}
@@ -31,7 +32,7 @@ export default {
   props: {
     Anoun: {
       type: String,
-      default: 'Pruebas psicologicas',
+      default: 'PsicoTT',
       description: 'Sidebar title'
     },
     title: {
@@ -46,7 +47,7 @@ export default {
     },
     logo: {
       type: String,
-      default: 'http://demos.creative-tim.com/nuxt-black-dashboard-pro/img/icon-nuxt.svg',
+      default: 'https://ttpruebaspsico.s3.amazonaws.com/logo/Logo.jpeg',
       description: 'Sidebar app logo'
     },
     backgroundColor: {

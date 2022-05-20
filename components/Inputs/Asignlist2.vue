@@ -1,7 +1,7 @@
 <template>
 <div class="container">
     <div class="table-responsive-sm">
-        <table class="table table-hover table-fixed" >
+        <table class="table table-hover table-fixed">
             <thead>
                 <tr>
                     <th>Prueba</th>
@@ -16,20 +16,22 @@
                 <tr v-for="asignation in pageOfItems" :key="asignation.index">
                     <td>{{ asignation.prueba }}</td>
                     <td>{{ asignation.creador }}</td>
-                    <td v-if="day > asignation.fecha_limite" bgcolor="red">{{ asignation.fecha_limite }} - caducada
+                    <!-- <td v-if="day > asignation.fecha_limite" bgcolor="red">{{ asignation.fecha_limite }} - caducada </td> -->
+                    <td v-if="day > asignation.fecha_limite && asignation.status == 'Pendiente'">
+                        <p class="line"> {{ asignation.fecha_limite }} - caducada </p>
                     </td>
                     <td v-else>{{ asignation.fecha_limite }}</td>
                     <td>{{ asignation.updated_at.split('T')[0] }}</td>
                     <td>{{ asignation.status }}</td>
                     <td>
-                        <b-button @click.prevent="showchat(asignation.coment, asignation.prueba, asignation.paciente)" v-b-modal.modal-prevent-closing variant="warning" class="rounded-circle px-3 mr-2" v-b-tooltip.hover title="Comentarios">
+                        <b-button @click.prevent="showchat(asignation.coment, asignation.prueba, asignation.paciente)" v-b-modal.modal-prevent-closing  class="button rounded-circle px-3 mr-2 " v-b-tooltip.hover title="Ver comentarios">
                             <b-icon icon="chat" scale="2"></b-icon>
                         </b-button>
-                        <b-button v-if="day < asignation.fecha_limite  && asignation.status !='Contestada'" :to="`/Asignament/${asignation.prueba}`"  variant="success" class="rounded-circle px-3" v-b-tooltip.hover title="Contestar asignacion">
+                        <b-button v-if="day < asignation.fecha_limite  && asignation.status !='Contestada'" :to="`/Asignament/${asignation.prueba}`" variant="success" class="rounded-circle px-3" v-b-tooltip.hover title="Contestar asignacion">
                             <b-icon icon="pencil-square" scale="2">
                             </b-icon>
                         </b-button>
-                        <b-button v-if="asignation.status =='Contestada'" @click.prevent="createpdf(asignation.prueba) "   variant="danger" class="rounded-circle px-3" v-b-tooltip.hover title="Descargar reporte">
+                        <b-button v-if="asignation.status =='Contestada'" @click.prevent="createpdf(asignation.prueba) " variant="danger" class="rounded-circle px-3" v-b-tooltip.hover title="Descargar reporte">
                             <b-icon icon="file-earmark-arrow-down" scale="2">
                             </b-icon>
                         </b-button>
@@ -38,7 +40,7 @@
             </tbody>
         </table>
         <footer class="mt-30">
-            <jw-pagination :items="asign" :pageSize="5" @changePage="onChangePage"></jw-pagination>
+            <jw-pagination :items="asign" :pageSize="5" :labels="customLabels"  @changePage="onChangePage"></jw-pagination>
         </footer>
 
         <b-modal id="modal-prevent-closing" ref="modal" hide-footer :title="titulo" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal">
@@ -71,7 +73,7 @@
 
         <b-modal id="modal-prevent-delete" ref="modal3" title="Borrar asignacion" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOkd">¿Deseas borrar esta asignacion?</b-modal>
 
-<!-- <b-modal id="modal-prevent-answer" hide-footer ref="modalpdf" title="Respuestas" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOk">
+        <!-- <b-modal id="modal-prevent-answer" hide-footer ref="modalpdf" title="Respuestas" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOk">
             <div align="center" ref="document">
                 <div v-if="answertype == 'Likert'">
                     <b-form >
@@ -109,64 +111,60 @@
                 <b-button @click="exportToPDF">Descargar reporte</b-button>
             </div>
         </b-modal> -->
- <vue-html2pdf
-        :show-layout="false"
-        :float-layout="true"
-        :enable-download="true"
-        :preview-modal="true"
-        :paginate-elements-by-height="1400"
-        filename="Reportepsico"
-        :pdf-quality="2"
-        :manual-pagination="true"
-        pdf-format="a4"
-        pdf-orientation="landscape"
-        pdf-content-width="800px"
-        ref="html2Pdf"
-    >
-        <section slot="pdf-content">
-            <!-- PDF Content Here -->
-             <div align="center" ref="document">
-                <div v-if="answertype == 'Likert'">
-                <h3 style="color: black" align="center">{{titulo2}}</h3>
-                    <b-form >
-            <div v-for="(question, index) in topdf" :key="index">
-                <b-form-group :label="question.pregunta" label-class="black">
-                    <b-form-radio-group v-model="question.respuesta" :options="question.opciones" disabled>
-                    </b-form-radio-group>
-                </b-form-group>
-            </div>
-            <b-form-group label="Resultado" align-items="center">
-                <!-- <b-form-textarea v-model="psicoresult" rows="3" plaintext>
+        <vue-html2pdf :show-layout="false" :float-layout="true" :enable-download="true" :preview-modal="true" :paginate-elements-by-height="1400" filename="Reportepsico" :pdf-quality="2" :manual-pagination="true" margin:4 pdf-format="a4" pdf-orientation="Portrait" pdf-content-width="800px" ref="html2Pdf">
+            <section slot="pdf-content">
+                <!-- PDF Content Here -->
+                <div align="center" ref="document">
+                    <p >
+                        <img position="top-right"  src="~/static/Logo.jpeg" alt="Logo" width="100" height="100">
+                    </p>
+                    <br>
+                    <hr>
+                    <div v-if="answertype == 'Likert'">
+                        <h3 style="color: black" align="center">{{titulo2}}</h3>
+                        <hr>
+                        <b-form>
+                            <div v-for="(question, index) in topdf" :key="index">
+                                <b-form-group :label="'Pregunta ' + (index +1) + '.- ' + question.pregunta" label-class="black">
+                                    <b-form-radio-group v-model="question.respuesta" :options="question.opciones" disabled>
+                                    </b-form-radio-group>
+                                </b-form-group>
+                                <hr>
+                            </div>
+                            <b-form-group label="Resultado" align-items="center">
+                                <!-- <b-form-textarea v-model="psicoresult" rows="3" plaintext>
             </b-form-textarea> -->
-            <h2 style="color: black" align="center">{{psicoresult}}</h2>
-            </b-form-group>
+                                <p style="color: black" align="center">{{psicoresult}}</p>
+                            </b-form-group>
 
-        </b-form>
+                        </b-form>
+                    </div>
+
+                    <div v-if="answertype == 'Abierta'">
+                        <h3 style="color: black" align="center">{{titulo2}}</h3>
+                        <b-form>
+                            <div v-for="(question, index) in topdf" :key="index">
+                                <p>{{ question.tipo }}</p>
+                                <b-form-group :label="'Pregunta ' + (index +1) + '.- ' + question.pregunta" label-class="black">
+                                    <p style="color: black" align="center">R: {{question.respuesta}}</p>
+                                </b-form-group>
+                                <hr>
+                            </div>
+                            <b-form-group label="Resultado" align-items="center">
+                                <h2 style="color: black" align="center">{{psicoresult}}</h2>
+                            </b-form-group>
+
+                        </b-form>
+                    </div>
                 </div>
-
-                <div v-if="answertype == 'Abierta'">
-                <h3 style="color: black" align="center">{{titulo2}}</h3>
-                    <b-form>
-            <div v-for="(question, index) in topdf" :key="index">
-                <p>{{ question.tipo }}</p>
-                <b-form-group :label="question.pregunta" label-class="black">
-                    <p style="color: black" align="center">R: {{question.respuesta}}</p>
-                </b-form-group>
-            </div>
-            <b-form-group label="Resultado" align-items="center">
-                 <h2 style="color: black" align="center">{{psicoresult}}</h2>
-            </b-form-group>
-
-        </b-form>
-                </div>
-            </div>
-        
-        </section>
-    </vue-html2pdf>
+                <!-- <footer align="right">Este es un reporte generado por el sistema, carece de validez oficial</footer> -->
+            </section>
+        </vue-html2pdf>
         <!-- <p>{{ day }}</p> -->
     </div>
 </div>
 </template>
+
 <script>
 import {
     mapState
@@ -202,8 +200,14 @@ export default {
             },
             sansw: {
                 trial: '',
-                paci:''
-            }
+                paci: ''
+            },
+              customLabels: {
+    first: 'Primero',
+    last: 'Ultimo',
+    previous: 'Anterior',
+    next: 'Siguiente'
+},
         }
     },
     computed: {
@@ -214,17 +218,17 @@ export default {
     },
     methods: {
 
-        exportToPDF () {
-				// html2pdf(this.$refs.document, {
-				// 	margin: 1,
-				// 	filename: 'Reportepsico.pdf',
-                //     	image: { type: 'jpeg', quality: 0.98 },
-				// 	html2canvas: { dpi: 192, letterRendering: true },
-				// 	jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
-				// })
+        exportToPDF() {
+            // html2pdf(this.$refs.document, {
+            // 	margin: 1,
+            // 	filename: 'Reportepsico.pdf',
+            //     	image: { type: 'jpeg', quality: 0.98 },
+            // 	html2canvas: { dpi: 192, letterRendering: true },
+            // 	jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+            // })
 
-                this.$refs.html2Pdf.generatePdf()
-			},
+            this.$refs.html2Pdf.generatePdf()
+        },
         resetModal() {
             this.name = ''
             this.nameState = null,
@@ -306,9 +310,9 @@ export default {
             }
         },
 
-      async  createpdf(prueba){
-          this.sansw.trial = prueba
-          this.sansw.paci = localStorage.getItem('nick')
+        async createpdf(prueba) {
+            this.sansw.trial = prueba
+            this.sansw.paci = localStorage.getItem('nick')
             let a = await this.$store.dispatch("paci/getansw", this.sansw);
             let result = this.answer[0]
             this.titulo2 = "Respuestas de " + result.quien_respondio + " para " + result.nombre_prueba
@@ -363,5 +367,17 @@ export default {
 <style scoped>
 .black {
     font-weight: bold;
+    color: black;
 }
+
+.line {
+    text-decoration: line-through;
+    text-decoration-color: red;
+    font-weight: bold;
+}
+.button, .button:hover{
+    background:orange !important;
+    transition-duration: 0.4s;
+}
+.button:hover {opacity: 1}
 </style>

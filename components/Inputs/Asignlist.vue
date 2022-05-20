@@ -15,14 +15,14 @@
                     <tr v-for="asignation in pageOfItems" :key="asignation.index">
                         <td>{{ asignation.prueba }}</td>
                         <td>{{ asignation.paciente }}</td>
-                        <td v-if="day > asignation.fecha_limite" bgcolor="red">{{ asignation.fecha_limite }} - caducada
-                        </td>
+                        <!-- <td v-if="day > asignation.fecha_limite" bgcolor="red">{{ asignation.fecha_limite }} - caducada </td> -->
+                        <td v-if="day > asignation.fecha_limite && asignation.status == 'Pendiente'" ><p class="line"> {{ asignation.fecha_limite }} - caducada </p></td>
                         <td v-else>{{ asignation.fecha_limite }}</td>
                         <td>{{ asignation.status }}</td>
                         <td>
                             <b-button
                                 @click.prevent="showchat(asignation.coment, asignation.prueba, asignation.paciente)"
-                                v-b-modal.modal-prevent-closing variant="warning" class="rounded-circle px-3 mr-2"
+                                v-b-modal.modal-prevent-closing  class="button rounded-circle px-3 mr-2"
                                 v-b-tooltip.hover title="Comentarios">
                                 <b-icon icon="chat" scale="2"></b-icon>
                             </b-button>
@@ -34,7 +34,7 @@
 
                             <b-button @click.prevent="getdate(asignation.prueba, asignation.paciente)"
                                 v-b-modal.modal-prevent-delete variant="danger" class="rounded-circle px-3"
-                                v-b-tooltip.hover title="Eliminar">
+                                v-b-tooltip.hover title="Eliminar asignacion">
                                 <b-icon icon="x-circle" scale="2"></b-icon>
                             </b-button>
                             <b-button v-if="asignation.status == 'Contestada' " @click.prevent="editresult(asignation.prueba, asignation.paciente)"
@@ -47,7 +47,7 @@
                 </tbody>
             </table>
             <footer class="mt-30">
-                <jw-pagination :items="asign" :pageSize="5" @changePage="onChangePage"></jw-pagination>
+                <jw-pagination :items="asign" :pageSize="5" :labels="customLabels"  @changePage="onChangePage"></jw-pagination>
             </footer>
 
             <b-modal id="modal-prevent-closing" ref="modal" hide-footer :title="titulo" header-bg-variant="default"
@@ -105,7 +105,7 @@
             </b-form-textarea>
         </b-form>
         <footer class="mt-30">
-                <jw-pagination :items="result" :pageSize="3" @changePage="onChangePage2"></jw-pagination>
+                <jw-pagination :items="result" :pageSize="3" :labels="customLabels"  @changePage="onChangePage2"></jw-pagination>
             </footer>
                 </div>
 
@@ -173,6 +173,12 @@ export default {
             result: null,
             treatment: '',
             answertype: '',
+            customLabels: {
+    first: 'Primero',
+    last: 'Ultimo',
+    previous: 'Anterior',
+    next: 'Siguiente'
+},
         }
     },
     computed: {
@@ -330,5 +336,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.line{
+    text-decoration: line-through;
+    text-decoration-color: red;
+    font-weight: bold;
+}
+.button, .button:hover{
+    background:orange !important;
+    transition-duration: 0.4s;
+}
 </style>

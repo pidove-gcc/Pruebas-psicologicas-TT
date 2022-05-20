@@ -56,8 +56,8 @@
         <template slot="header">
           <div class="row">
             <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
-              <h5 class="card-category">Asignaciones</h5>
-              <h2 class="card-title">Por mes</h2>
+              <h5 class="card-category">Asignaciones creadas</h5>
+              <h2 class="card-title">Año 2022</h2>
             </div>
             <div class="col-sm-6 d-flex d-sm-block">
               <!-- <div
