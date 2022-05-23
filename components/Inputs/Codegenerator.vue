@@ -1,12 +1,12 @@
 <template>
 <div class="container">
     <div align="center" class="mt-5 border border-primary" style="max-width: 30rem;">
-        <b-card title="Ingrese su correo, un codigo le sera enviado">
+        <b-card title="Ingrese su correo, un código le será enviado">
             <b-form @submit.stop.prevent="sendcode">
-                <b-form-group id="input-group-1" label="Correo electronico:" label-for="input-1">
+                <b-form-group id="input-group-1" label="Correo electrónico:" label-for="input-1">
                     <b-form-input v-model="email" id="input-1" type="email" placeholder="correo" required></b-form-input>
                 </b-form-group>
-                <b-button type="submit">Enviar</b-button>
+                <b-button type="submit">Enviar código</b-button>
             </b-form>
         </b-card>
     </div>

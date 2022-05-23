@@ -21,7 +21,8 @@
     </div>
 
     <ul class="navbar-nav" :class="$rtl.isRTL ? 'mr-auto' : 'ml-auto'">
-      <div class="search-bar input-group" @click="searchModalVisible = true">
+    <!-- Este es el boton para activar la barra de busqueda, descomentar junto a lo de abajo -->
+      <!-- <div class="search-bar input-group" @click="searchModalVisible = true">
         <button
           class="btn btn-link"
           id="search-button"
@@ -30,9 +31,12 @@
         >
           <i class="tim-icons icon-zoom-split"></i>
         </button>
+      </div> -->
         <!-- You can choose types of search input -->
-      </div>
-      <modal
+
+
+      <!-- Esta es la barra de busqueda descomentar junto a lo de arriba para que funcione -->
+      <!-- <modal
         :show.sync="searchModalVisible"
         class="modal-search"
         id="searchModal"
@@ -47,8 +51,9 @@
           id="inlineFormInputGroup"
           placeholder="SEARCH"
         />
-      </modal>
-      <base-dropdown
+      </modal> -->
+      <!-- Esta la barra de notificaciones -->
+      <!-- <base-dropdown
         tag="li"
         :menu-on-right="!$rtl.isRTL"
         title-tag="a"
@@ -81,7 +86,7 @@
         <li class="nav-link">
           <a href="#" class="nav-item dropdown-item">Another one</a>
         </li>
-      </base-dropdown>
+      </base-dropdown> -->
       <base-dropdown
         tag="li"
         :menu-on-right="!$rtl.isRTL"
@@ -99,8 +104,8 @@
           <b class="caret d-none d-lg-block d-xl-block"></b>
           <p class="d-lg-none">Opciones</p>
         </template>
-        <li class="nav-link">
-          <a href="#" class="nav-item dropdown-item">Editar perfil</a>
+        <li v-if="level == 1 || level == 2" class="nav-link" >
+          <a href="/user" class="nav-item dropdown-item">Editar perfil</a>
         </li>
         <!-- <li class="nav-link">
           <a href="#" class="nav-item dropdown-item">Settings</a>

@@ -3,8 +3,8 @@
     <b-card :title=Titulo>
         <div class="form-check-inline">
         <div align="left">
- <p>Seleccione el tema y evaluacion de la prueba</p>
-            <b-form-select class="form-control" @change="changetype" v-model="typeclasif" align="center" id="questype" style="width: 100%" required>
+ <p>Selecciona el tema y evaluación de la prueba</p>
+            <b-form-select class="form-control" :disabled="selctype" @change="changetype" v-model="typeclasif" align="center" id="questype" style="width: 100%" required>
                 <template #first>
                     <b-form-select-option :value="null" disabled>Seleccione</b-form-select-option>
                     <b-form-select-option v-for="(type, index) in clasif" :value="type.type" v-bind:key="index" style="background: #344675">{{ type.type }}</b-form-select-option>
@@ -29,11 +29,11 @@
         <br>
         <b-form v-if="typequest == 'Pregunta abierta'" @submit.stop.prevent="onSubmit">
             <b-form-group id="input-group-1" label="Titulo:" label-for="input-1">
-                <b-form-input id="input-1" v-model="Titulo" type="text" placeholder="Ingresa el titulo de tu prueba" required>
+                <b-form-input id="input-1" v-model="Titulo" type="text" placeholder="Ingresa el título de tu prueba" required>
                 </b-form-input>
             </b-form-group>
-            <b-form-group id="input-group-2" label="Descripcion de la prueba" label-for="input-2">
-                <b-form-input id="input-2" v-model="Descrip" type="text" placeholder="Ingresa una descripcion" required>
+            <b-form-group id="input-group-2" label="Descripción de la prueba" label-for="input-2">
+                <b-form-input id="input-2" v-model="Descrip" type="text" placeholder="Ingresa una descripción" required>
                 </b-form-input>
             </b-form-group>
             <div class="quest-buttom">
@@ -82,11 +82,11 @@
                 </div> -->
             <b-form @submit.stop.prevent="onSubmit2">
                 <b-form-group id="input-group-1" label="Titulo:" label-for="input-1">
-                    <b-form-input id="input-1" v-model="Titulo" type="text" placeholder="Ingresa el titulo de tu prueba" required>
+                    <b-form-input id="input-1" v-model="Titulo" type="text" placeholder="Ingresa el título de tu prueba" required>
                     </b-form-input>
                 </b-form-group>
-                <b-form-group id="input-group-2" label="Descripcion de la prueba" label-for="input-2">
-                    <b-form-input id="input-2" v-model="Descrip" type="text" placeholder="Ingresa una descripcion" required>
+                <b-form-group id="input-group-2" label="Descripción de la prueba" label-for="input-2">
+                    <b-form-input id="input-2" v-model="Descrip" type="text" placeholder="Ingresa una descripción" required>
                     </b-form-input>
                 </b-form-group>
                 <!-- <div v-if="optionbox == 3" class="quest-buttom">

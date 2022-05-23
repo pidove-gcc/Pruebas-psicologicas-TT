@@ -1,9 +1,9 @@
 <template>
 <div class="container">
     <div v-if="option" align="center" class="mt-5 border border-primary">
-        <b-card title="Iniciar sesion">
+        <b-card title="Iniciar sesión">
             <b-form @submit.stop.prevent="starsession">
-                <b-form-group id="input-group-1" label="Correo electronico:" label-for="input-1">
+                <b-form-group id="input-group-1" label="Correo electrónico:" label-for="input-1">
                     <b-form-input v-model="usuario.email" id="input-1" type="email" placeholder="correo" required></b-form-input>
                 </b-form-group>
                 <label>Contraseña:</label>
@@ -28,7 +28,7 @@
                             <NuxtLink to="/recovpass">Olvide mi contraseña</NuxtLink>
                         </div>
                     </b-form-group> -->
-                <b-button type="submit">Iniciar sesion</b-button>
+                <b-button type="submit">Iniciar sesión</b-button>
             </b-form>
             <div>
                 <label class="button text-primary" @click="setform">{{ text }}</label>

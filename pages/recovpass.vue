@@ -1,7 +1,8 @@
 <template>
   <div class="container">
       <div align="center">
-          <h3>restablecimiento de contraseña</h3>
+          <br>
+          <h3>Restablecimiento de contraseña</h3>
           <codegenerator/>
       </div>
   </div>

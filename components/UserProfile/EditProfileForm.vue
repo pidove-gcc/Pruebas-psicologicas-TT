@@ -14,7 +14,7 @@
           </base-input>
         </div>-->
             <div class="col-md-3">
-                <b-form-group label="Username" label-for="name-input-1" invalid-feedback="El nombre es requerido" :state="nameState">
+                <b-form-group label="Nombre de usuario" label-for="name-input-1" invalid-feedback="El nombre es requerido" :state="nameState">
                     <b-form-input id="name-input-1" type="text" v-model="user.nombre_usuario" :state="nameState" required disabled></b-form-input>
                 </b-form-group>
             </div>
@@ -82,7 +82,7 @@
             </div>
         </div>
 
-        <base-button native-type="submit" type="primary" class="btn-fill">Save</base-button>
+        <base-button native-type="submit" type="primary" class="btn-fill">Actualizar</base-button>
     </form>
 </card>
 </template>

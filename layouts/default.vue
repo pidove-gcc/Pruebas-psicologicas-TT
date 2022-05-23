@@ -34,6 +34,12 @@
                     path: '/Gestionasign'
                 }">
                 </sidebar-item>
+                <sidebar-item v-if="level == 1" :link="{
+                    name: 'Generación de reportes',
+                    icon: 'tim-icons icon-paper',
+                    path: '/Reportes'
+                }">
+                </sidebar-item>
                 <sidebar-item v-if="level == 0" :link="{
                     name: 'Registrar psicologo',
                     icon: 'tim-icons icon-world',

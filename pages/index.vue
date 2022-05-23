@@ -631,7 +631,7 @@ export default {
         ],
         labels: bigChartLabels,
       };
-      this.$refs.bigChart.updateGradients(chartData);
+      // this.$refs.bigChart.updateGradients(chartData);
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
       console.log('Pase esto a la grafica')
