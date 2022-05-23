@@ -7,6 +7,7 @@
                     <th>Nombre</th>
                     <th>Tipo</th>
                     <th>Clasificacion</th>
+                    <th>N° de preguntas</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -15,6 +16,7 @@
                     <td>{{ prueba.nombre_prueba }}</td>
                     <td>{{ prueba.tipo }}</td>
                     <td>{{ prueba.clasif }}</td>
+                    <td>{{ JSON.parse(prueba.reactivos).length }}</td>
                     <td>
                         <b-button @click.prevent="create(prueba)" v-b-modal.modal-prevent-answer variant="secondary" class="rounded-circle px-3 mr-2" v-b-tooltip.hover title="Ver prueba">
                             <b-icon icon="eye-fill" scale="2"></b-icon>
@@ -31,7 +33,7 @@
             </tbody>
         </table>
         <footer class="mt-30">
-            <jw-pagination :items="pruebas" :pageSize="5" :labels="customLabels"  @changePage="onChangePage"></jw-pagination>
+            <jw-pagination :items="pruebas" :pageSize="5" :labels="customLabels" @changePage="onChangePage"></jw-pagination>
         </footer>
         <b-modal id="modal-prevent-closing" ref="modal" title="Asignar prueba" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOk">
             <b-form-group label="Pacientes registrados">
@@ -48,10 +50,10 @@
 
         <b-modal id="modal-prevent-delete" ref="modal2" title="Borrar psicologo" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOkd">¿Deseas borrar la prueba {{ todelete }}?</b-modal>
 
-        <b-modal  id="modal-prevent-answer" hide-footer ref="modalpdf" :title="titulo2" :header-text-variant="headercolor" header-bg-variant="default" header-class="justify-content-center text-white header" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOk">
+        <b-modal id="modal-prevent-answer" hide-footer ref="modalpdf" :title="titulo2"  header-bg-variant="light" header-class="justify-content-center  header" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOk">
             <div align="center" ref="document">
                 <div v-if="answertype == 'Likert'">
-                    <b-form @submit.stop.prevent="submit(topdf)">
+                    <b-form>
                         <!-- <p style="color: white;" align="center">{{titulo2}}</p> -->
                         <div v-for="(question, index) in pageOfItems2" :key="index">
                             <b-form-group :label="'Pregunta ' + (index +1) + '.- ' + question.pregunta" label-class="black">
@@ -60,11 +62,14 @@
                             </b-form-group>
                         </div>
                         <!-- <p style="color: whitesmoke;">{{resp}}</p> -->
-                        <!-- <b-button type="submit">Enviar respuestas</b-button> -->
                     </b-form>
                     <footer class="mt-30">
                         <jw-pagination :items="topdf" :pageSize="3" :labels="customLabels" @changePage="onChangePage2"></jw-pagination>
                     </footer>
+                     <br>
+                        <div align="right">
+                            <b-button :to="`/Edit/${sansw.trial}`">Editar prueba</b-button>
+                        </div>
                 </div>
                 <div v-if="answertype == 'Abierta'">
                     <b-form>
@@ -79,6 +84,10 @@
                     <footer class="mt-30">
                         <jw-pagination :items="topdf" :pageSize="3" :labels="customLabels" @changePage="onChangePage2"></jw-pagination>
                     </footer>
+                     <br>
+                        <div align="right">
+                            <b-button :to="`/Edit/${sansw.trial}`">Editar prueba</b-button>
+                        </div>
                 </div>
             </div>
             <div align="right">
@@ -244,7 +253,10 @@ export default {
 </script>
 
 <style scoped>
-.header{
-    color:aliceblue
+.header {
+    color: aliceblue ;
+    background-color: #da2228 !important;
+    font-family: "Arial Black";
+    text-decoration: line-through;
 }
 </style>

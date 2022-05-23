@@ -12,6 +12,7 @@ export const state = () => ({
   asignaciones: [],
   infoasignaciones: [],
   pacilist: [],
+  quest: [],
 });
 
 export const mutations = {
@@ -27,6 +28,9 @@ export const mutations = {
     localStorage.setItem("cv", pdf);
     // console.log(name)
     // console.log(pdf)
+  },
+  setquest(state, payload) {
+    state.quest = payload;
   },
   setAsign(state, payload) {
     state.asignaciones = payload;
@@ -368,6 +372,27 @@ export const actions = {
       const result = JSON.parse(JSON.stringify(response.data.data));
       commit("setList", result);
       return result;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async getquest({ commit, state }, payload) {
+    try {
+      const response = await Repository.get(`${apiTT}/editquest?trial=${payload.trial}&name=${payload.name}`);
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      commit("setquest", result);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async updatequest({ commit, state }, payload) {
+    try {
+      const response = await Repository.post(`${apiTT}/upquest?trial=${payload.trial}&name=${payload.name}&quest=${payload.quest}&descrip=${payload.descrip}&note=${payload.nota}`);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg;
     } catch (error) {
       console.log(error);
     }

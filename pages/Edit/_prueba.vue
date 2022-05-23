@@ -1,25 +1,25 @@
 <template>
 <div class="container">
-    <b-card :title=Titulo>
+    <b-card v-if="adv != 'Prueba no encontrada'" :title=Titulo>
         <div class="form-check-inline">
-        <div align="left">
- <p>Seleccione el tema y evaluacion de la prueba</p>
-            <b-form-select class="form-control" @change="changetype" v-model="typeclasif" align="center" id="questype" style="width: 100%" required>
-                <template #first>
-                    <b-form-select-option :value="null" disabled>Seleccione</b-form-select-option>
-                    <b-form-select-option v-for="(type, index) in clasif" :value="type.type" v-bind:key="index" style="background: #344675">{{ type.type }}</b-form-select-option>
-                </template>
-            </b-form-select>
-        </div> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-        <div align="right">
-            <br>
-            <b-button v-b-modal.modal-prevent-deleteall>Borrar todo</b-button>
-        </div>
+            <div align="left">
+                <p>Seleccione el tema y evaluacion de la prueba</p>
+                <b-form-select class="form-control" @change="changetype" v-model="typeclasif" align="center" id="questype" style="width: 100%" disabled>
+                    <template #first>
+                        <b-form-select-option :value="null" disabled>Seleccione</b-form-select-option>
+                        <b-form-select-option v-for="(type, index) in clasif" :value="type.type" v-bind:key="index" style="background: #344675">{{ type.type }}</b-form-select-option>
+                    </template>
+                </b-form-select>
+            </div> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            <div align="right">
+                <br>
+                <b-button disabled v-b-modal.modal-prevent-deleteall>Borrar todo</b-button>
+            </div>
         </div>
         <div align="left" v-if="typeclasif != null">
             <br>
             <p>Tipo de prueba</p>
-            <b-form-select class="form-control" :disabled="selctype" @change="blocktype" v-model="typequest" align="center" id="questype" style="width: 17%" required>
+            <b-form-select class="form-control" disabled @change="blocktype" v-model="typequest" align="center" id="questype" style="width: 17%" required>
                 <template #first>
                     <b-form-select-option :value="null" disabled>Seleccione</b-form-select-option>
                     <b-form-select-option v-for="(type, index) in quest" :value="type.type" v-bind:key="index" style="background: #344675">{{ type.type }}</b-form-select-option>
@@ -29,7 +29,7 @@
         <br>
         <b-form v-if="typequest == 'Pregunta abierta'" @submit.stop.prevent="onSubmit">
             <b-form-group id="input-group-1" label="Titulo:" label-for="input-1">
-                <b-form-input id="input-1" v-model="Titulo" type="text" placeholder="Ingresa el titulo de tu prueba" required>
+                <b-form-input id="input-1" v-model="Titulo" type="text" placeholder="Ingresa el titulo de tu prueba" readonly>
                 </b-form-input>
             </b-form-group>
             <b-form-group id="input-group-2" label="Descripcion de la prueba" label-for="input-2">
@@ -38,11 +38,11 @@
             </b-form-group>
             <div class="quest-buttom">
                 <div v-for="(question, index) in psicoform1" :key="index">
-                <div align="right">
-                            <b-button @click.prevent="getindexask(index)" v-b-modal.modal-prevent-delete variant="danger" class=" rounded-circle px-3 mr-2" v-b-tooltip.hover title="Borrar pregunta">
-                                <b-icon icon="dash" scale="2"></b-icon>
-                            </b-button>
-                        </div>
+                    <div align="right">
+                        <b-button @click.prevent="getindexask(index)" v-b-modal.modal-prevent-delete variant="danger" class=" rounded-circle px-3 mr-2" v-b-tooltip.hover title="Borrar pregunta">
+                            <b-icon icon="dash" scale="2"></b-icon>
+                        </b-button>
+                    </div>
                     <b-form-group label="Pregunta">
                         <b-form-input v-model="question.pregunta" type="text" required></b-form-input>
                     </b-form-group>
@@ -56,9 +56,9 @@
                 </b-form-textarea>
             </b-form-group>
             <div class="form-check-inline">
-                <b-button type="submit" :disabled="disaagre">Guardar prueba</b-button> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
- &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-  &nbsp;   <div class="addbutton mr-5" align="right" v-if="typeclasif != null && typequest == 'Pregunta abierta'">
+                <b-button type="submit" :disabled="disaagre">Guardar cambios</b-button> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                &nbsp; <div class="addbutton mr-5" align="right" v-if="typeclasif != null && typequest == 'Pregunta abierta'">
                     <b-button @click="addQuestion">Agregar pregunta</b-button>
                 </div>
                 <div class="addbutton" align="right" v-if="typeclasif != null && typequest == 'Likert'">
@@ -123,9 +123,9 @@
                     <b-form-textarea id="textarea" v-model="Note" placeholder="Ingresa una nota" rows="2" max-rows="6"></b-form-textarea>
                 </b-form-group>
                 <div class="form-check-inline">
-                    <b-button type="submit" :disabled="disaagre">Guardar prueba</b-button> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
- &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-  &nbsp;
+                    <b-button type="submit" :disabled="disaagre">Guardar cambios</b-button> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    &nbsp;
                     <div class="addbutton" align="right" v-if="typeclasif != null && typequest == 'Pregunta abierta'">
                         <b-button @click="addQuestion">Agregar pregunta</b-button>
                     </div>
@@ -136,6 +136,7 @@
             </b-form>
         </div>
     </b-card>
+    <h2 v-else>No tienes permitido editar esta prueba o esta se ha eliminado</h2>
     <b-modal id="modal-prevent-type" ref="modal" title="¿Que tipo de pregunta sera?" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOk">
         <form ref="form" @submit.stop.prevent="handleSubmit" align="center">
             <b-form-select class="form-control" v-model="optiontype" align="center" id="questype" style="width: 70%" @change="loadoption()" required>
@@ -153,14 +154,17 @@
 </template>
 
 <script>
+import {
+    mapState
+} from "vuex";
 export default {
-    name: 'Crear',
     data() {
         return {
+            value: '',
             Titulo: "Nueva prueba",
             Descrip: '',
             Note: 'Ninguna',
-            disaagre: true,
+            disaagre: false,
             typequest: null,
             todelete: null,
             optiontype: null,
@@ -170,6 +174,14 @@ export default {
             optionbox: null,
             psicoform1: [],
             psicoform2: [],
+            infoquest: {
+                name: '',
+                trial: '',
+                quest: '',
+                descrip: '',
+                nota: '',
+            },
+            adv: '',
             // psicoform2: [{
             //     pregunta: '',
             //     opciones: ['Totalmente en desacuerdo', 'Ni de acuerdo ni en desacuerdo', 'Totalmente de acuerdo']
@@ -466,6 +478,11 @@ export default {
             }
         }
     },
+    computed: {
+        ...mapState({
+            prueba: (state) => state.psico.quest,
+        })
+    },
     methods: {
         changetype() {
             if (this.typeclasif == 'Escala de Ansiedad patológica de J. Grau y cols') {
@@ -478,17 +495,16 @@ export default {
             console.log("Tengo el index: " + index)
             this.todelete = index
         },
-        deleteask(){
+        deleteask() {
             if (this.typequest == 'Pregunta abierta') {
                 console.log(this.psicoform1[this.todelete])
-                this.psicoform1.splice(this.todelete,1)
+                this.psicoform1.splice(this.todelete, 1)
                 if (this.psicoform1.length == 0) {
                     this.disaagre = true
                 }
-            }
-            else if(this.typequest == 'Likert'){
+            } else if (this.typequest == 'Likert') {
                 console.log(this.psicoform2[this.todelete])
-                this.psicoform2.splice(this.todelete,1)
+                this.psicoform2.splice(this.todelete, 1)
                 if (this.psicoform2.length == 0) {
                     this.disaagre = true
                 }
@@ -497,7 +513,7 @@ export default {
                 this.$bvModal.hide('modal-prevent-delete')
             })
         },
-        deleteall(){
+        deleteall() {
             this.psicoform1 = []
             this.psicoform2 = []
             this.selctype = false
@@ -509,11 +525,11 @@ export default {
             this.Note = 'Ninguna'
             this.optiontype = null
             this.optionbox = null
-             this.$nextTick(() => {
+            this.$nextTick(() => {
                 this.$bvModal.hide('modal-prevent-deleteall')
             })
         },
-        blocktype(){
+        blocktype() {
             this.selctype = true
         },
         addQuestion() {
@@ -543,52 +559,45 @@ export default {
             this.disaagre = false
         },
         async onSubmit() {
-            const data = {
-                nombre: this.Titulo,
-                reactivos: JSON.stringify(this.psicoform1),
-                descrip: this.Descrip,
-                tipo: 'Abierta',
-                clasifi: this.typeclasif,
-                note: this.Note,
-                create: localStorage.getItem('nick'),
-            }
-            let a = await this.$store.dispatch("psico/createtrial", data);
-            if (a == 'Nombre de prueba en uso, ingrese otro') {
-                this.notifyVue("top", "right", a, 4, 'icon-simple-remove');
-            } else {
+            // const data = {
+            //     nombre: this.Titulo,
+            //     reactivos: JSON.stringify(this.psicoform1),
+            //     descrip: this.Descrip,
+            //     tipo: 'Abierta',
+            //     clasifi: this.typeclasif,
+            //     note: this.Note,
+            //     create: localStorage.getItem('nick'),
+            // }
+            this.infoquest.quest = JSON.stringify(this.psicoform1)
+            this.infoquest.descrip = this.Descrip
+            this.infoquest.nota = this.Note
+            let a = await this.$store.dispatch("psico/updatequest", this.infoquest);
+            if (a == 'Prueba actualizada') {
                 this.notifyVue("top", "right", a, 2, 'icon-satisfied');
-                console.log("Ya estoy resetando los datos")
-                location.reload();
+                this.$router.push("/Gestionpruebas");
+            } else {
+                this.notifyVue("top", "right", 'Ha ocurrido un error', 4, 'icon-simple-remove');
             }
-
-            // this.typequest= null
-            //     this.optiontype= null
-            //     this.typeclasif= null
-
-            //     this.optionbox=null
-            //     this.psicoform1= []
-            //     this.psicoform2= []
-            //     this.psicoform3= []
-            //console.log(JSON.stringify(data))
-            // alert(JSON.stringify(data))
         },
         async onSubmit2() {
-            const data = {
-                nombre: this.Titulo,
-                reactivos: JSON.stringify(this.psicoform2),
-                descrip: this.Descrip,
-                tipo: 'Likert',
-                clasifi: this.typeclasif,
-                note: this.Note,
-                create: localStorage.getItem('nick'),
-            }
-            let a = await this.$store.dispatch("psico/createtrial", data);
-            if (a == 'Nombre de prueba en uso, ingrese otro') {
-                this.notifyVue("top", "right", a, 4, 'icon-simple-remove');
-            } else {
+            // const data = {
+            //     nombre: this.Titulo,
+            //     reactivos: JSON.stringify(this.psicoform2),
+            //     descrip: this.Descrip,
+            //     tipo: 'Likert',
+            //     clasifi: this.typeclasif,
+            //     note: this.Note,
+            //     create: localStorage.getItem('nick'),
+            // }
+            this.infoquest.quest = JSON.stringify(this.psicoform2)
+            this.infoquest.descrip = this.Descrip
+            this.infoquest.nota = this.Note
+            let a = await this.$store.dispatch("psico/updatequest", this.infoquest);
+            if (a == 'Prueba actualizada') {
                 this.notifyVue("top", "right", a, 2, 'icon-satisfied');
-                console.log("Ya estoy resetando los datos")
-                location.reload();
+                this.$router.push("/Gestionpruebas");
+            } else {
+                this.notifyVue("top", "right", 'Ha ocurrido un error', 4, 'icon-simple-remove');
             }
             //console.log(JSON.stringify(data))
             // alert(JSON.stringify(data))
@@ -777,8 +786,40 @@ export default {
             this.$nextTick(() => {
                 this.$bvModal.hide('modal-prevent-type')
             })
-        }
-    }
+        },
+        async gettrial() {
+            let user = localStorage.getItem('nick')
+            this.infoquest.name = user
+            this.infoquest.trial = this.value
+            let msg = await this.$store.dispatch("psico/getquest", this.infoquest);
+            this.adv = msg
+            console.log(msg);
+            console.log(this.prueba[0])
+            if (msg != 'Prueba no encontrada') {
+                this.typeclasif = this.prueba[0].clasif
+                this.typequest = this.prueba[0].tipo
+                if (this.typequest == 'Abierta') {
+                    this.typequest = 'Pregunta abierta'
+                }
+                console.log(this.typequest)
+                this.Titulo = this.prueba[0].nombre_prueba
+                this.Descrip = this.prueba[0].descripcion
+                this.Note = this.prueba[0].nota
+                if (this.typequest == 'Pregunta abierta') {
+                    this.psicoform1 = JSON.parse(this.prueba[0].reactivos)
+                    console.log(this.psicoform1)
+                } else if (this.typequest == 'Likert') {
+                    this.psicoform2 = JSON.parse(this.prueba[0].reactivos)
+                    console.log(this.psicoform2)
+                }
+            }
+
+        },
+    },
+    async beforeMount() {
+        this.value = this.$route.params.prueba;
+        await this.gettrial();
+    },
 }
 </script>
 

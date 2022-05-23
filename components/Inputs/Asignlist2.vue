@@ -7,7 +7,7 @@
                     <th>Prueba</th>
                     <th>Asignada por</th>
                     <th>Fecha limite</th>
-                    <th>Asignada</th>
+                    <th>Fecha de asignacion</th>
                     <th>Status</th>
                     <th>Acciones</th>
                 </tr>
