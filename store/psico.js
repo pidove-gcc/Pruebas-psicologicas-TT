@@ -13,6 +13,7 @@ export const state = () => ({
   infoasignaciones: [],
   pacilist: [],
   quest: [],
+  trialanws: [],
 });
 
 export const mutations = {
@@ -37,6 +38,9 @@ export const mutations = {
   },
   setPacilist(state, payload) {
     state.pacilist = payload;
+  },
+  settrialansw(state, payload) {
+    state.trialanws = payload;
   },
   setInfo(state, payload) {
     state.infoasignaciones = payload;
@@ -371,6 +375,17 @@ export const actions = {
       const response = await Repository.get(`${apiTT}/psico`);
       const result = JSON.parse(JSON.stringify(response.data.data));
       commit("setList", result);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async getansw({ commit, state },payload) {
+    try {
+      const response = await Repository.get(`${apiTT}/findanwers?trial${payload}`);
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      commit("settrialansw", result);
       return result;
     } catch (error) {
       console.log(error);

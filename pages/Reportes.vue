@@ -1,7 +1,7 @@
 <template>
 <div class="container">
     <div align="center">
-        <h2>Reportes</h2>
+        <h2>Generacion de reportes</h2>
         <Reportes/>
     </div>
 </div>
