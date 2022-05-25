@@ -164,7 +164,8 @@ export default {
         resetModal() {
             this.name = ''
             this.nameState = null,
-                this.message = ''
+                this.message = '',
+                 this.trialselect = null
         },
         handleOk(bvModalEvt) {
             // Prevent modal from closing
