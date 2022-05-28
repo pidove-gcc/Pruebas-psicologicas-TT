@@ -2,19 +2,19 @@
 <div class="container">
     <b-card :title=Titulo>
         <div class="form-check-inline">
-        <div align="left">
- <p>Selecciona el tema y evaluación de la prueba</p>
-            <b-form-select class="form-control" :disabled="selctype" @change="changetype" v-model="typeclasif" align="center" id="questype" style="width: 100%" required>
-                <template #first>
-                    <b-form-select-option :value="null" disabled>Seleccione</b-form-select-option>
-                    <b-form-select-option v-for="(type, index) in clasif" :value="type.type" v-bind:key="index" style="background: #344675">{{ type.type }}</b-form-select-option>
-                </template>
-            </b-form-select>
-        </div> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-        <div align="right">
-            <br>
-            <b-button v-b-modal.modal-prevent-deleteall>Borrar todo</b-button>
-        </div>
+            <div align="left">
+                <p>Selecciona el tema y evaluación de la prueba</p>
+                <b-form-select class="form-control" :disabled="selctype" @change="changetype" v-model="typeclasif" align="center" id="questype" style="width: 100%" required>
+                    <template #first>
+                        <b-form-select-option :value="null" disabled>Seleccione</b-form-select-option>
+                        <b-form-select-option v-for="(type, index) in clasif" :value="type.type" v-bind:key="index" style="background: #344675">{{ type.type }}</b-form-select-option>
+                    </template>
+                </b-form-select>
+            </div> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            <div align="right">
+                <br>
+                <b-button v-b-modal.modal-prevent-deleteall>Borrar todo</b-button>
+            </div>
         </div>
         <div align="left" v-if="typeclasif != null">
             <br>
@@ -38,11 +38,11 @@
             </b-form-group>
             <div class="quest-buttom">
                 <div v-for="(question, index) in psicoform1" :key="index">
-                <div align="right">
-                            <b-button @click.prevent="getindexask(index)" v-b-modal.modal-prevent-delete variant="danger" class=" rounded-circle px-3 mr-2" v-b-tooltip.hover title="Borrar pregunta">
-                                <b-icon icon="dash" scale="2"></b-icon>
-                            </b-button>
-                        </div>
+                    <div align="right">
+                        <b-button @click.prevent="getindexask(index)" v-b-modal.modal-prevent-delete variant="danger" class=" rounded-circle px-3 mr-2" v-b-tooltip.hover title="Borrar pregunta">
+                            <b-icon icon="dash" scale="2"></b-icon>
+                        </b-button>
+                    </div>
                     <b-form-group label="Pregunta">
                         <b-form-input v-model="question.pregunta" type="text" required></b-form-input>
                     </b-form-group>
@@ -57,8 +57,8 @@
             </b-form-group>
             <div class="form-check-inline">
                 <b-button type="submit" :disabled="disaagre">Guardar prueba</b-button> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
- &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-  &nbsp;   <div class="addbutton mr-5" align="right" v-if="typeclasif != null && typequest == 'Pregunta abierta'">
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                &nbsp; <div class="addbutton mr-5" align="right" v-if="typeclasif != null && typequest == 'Pregunta abierta'">
                     <b-button @click="addQuestion">Agregar pregunta</b-button>
                 </div>
                 <div class="addbutton" align="right" v-if="typeclasif != null && typequest == 'Likert'">
@@ -113,19 +113,30 @@
                         <div>
                             <b-form-group label="Respuesta">
                                 <b-form-radio-group id="radio-group-1" :options="question.opciones" name="radio-options"></b-form-radio-group>
-                                <p align="right">Tipo de pregunta: {{question.tipo}}</p>
+                                <div class="form-check-inline">
+                                    <p align="right">Tipo de pregunta: {{question.tipo}}</p>
+                                    <b-button v-b-modal.modal-prevent-edit @click.prevent="getanwsindex(index)">Editar respuestas</b-button>
+                                    <!-- <p>: {{question.opciones[1]}}</p> -->
+                                    <div v-for="anws in question.opciones" :key="anws.index">
+                                    <b-form-input v-model="anws.text"></b-form-input>
+                                    </div>
+                                    <p>{{question.pregunta}}</p>
+                                    <p>{{question.opciones}}</p>
+                                </div>
+                                
                             </b-form-group>
                         </div>
 
                     </div>
+                    <!-- <b-form-input v-model="psicoform2[0].pregunta"></b-form-input> -->
                 </div>
                 <b-form-group label="Nota">
                     <b-form-textarea id="textarea" v-model="Note" placeholder="Ingresa una nota" rows="2" max-rows="6"></b-form-textarea>
                 </b-form-group>
                 <div class="form-check-inline">
                     <b-button type="submit" :disabled="disaagre">Guardar prueba</b-button> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
- &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-  &nbsp;
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    &nbsp;
                     <div class="addbutton" align="right" v-if="typeclasif != null && typequest == 'Pregunta abierta'">
                         <b-button @click="addQuestion">Agregar pregunta</b-button>
                     </div>
@@ -149,6 +160,12 @@
     </b-modal>
     <b-modal id="modal-prevent-delete" ref="modal3" title="Borrar pregunta" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOkd">¿Deseas borrar esta pregunta?</b-modal>
     <b-modal id="modal-prevent-deleteall" ref="modal4" title="Borrar todos los ajustes" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOkda">¿Deseas borrar todas las preguntes y ajustes seleccionados?</b-modal>
+    <b-modal id="modal-prevent-edit" ref="modal5" title="Editar opciones de respuesta"  header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOkedit">
+    <div  v-for="answ in auxanws.opciones" :key="answ.index">
+    <!-- <p>{{toedit}} {{answ.text}}</p> -->
+        <b-form-input v-model="answ.text"></b-form-input>
+    </div>
+    </b-modal>
 </div>
 </template>
 
@@ -163,6 +180,8 @@ export default {
             disaagre: true,
             typequest: null,
             todelete: null,
+            toedit: 0,
+            auxanws: '',
             optiontype: null,
             selctype: false,
             typeclasif: null,
@@ -478,26 +497,39 @@ export default {
             console.log("Tengo el index: " + index)
             this.todelete = index
         },
-        deleteask(){
+        getanwsindex(index) {
+            console.log("Tengo el index: " + index)
+            this.toedit = index
+            console.log("Esto editare")
+            console.log(this.psicoform2[this.toedit])
+            this.auxanws = this.psicoform2[this.toedit]
+        },
+        pastenewansw(){
+            console.log("Pasando respuesta")
+            this.psicoform2[this.toedit].opciones =  this.auxanws.opciones
+            this.$nextTick(() => {
+                this.$bvModal.hide('modal-prevent-edit')
+            })
+        },
+        deleteask() {
             if (this.typequest == 'Pregunta abierta') {
                 console.log(this.psicoform1[this.todelete])
-                this.psicoform1.splice(this.todelete,1)
+                this.psicoform1.splice(this.todelete, 1)
                 if (this.psicoform1.length == 0) {
                     this.disaagre = true
                 }
-            }
-            else if(this.typequest == 'Likert'){
+            } else if (this.typequest == 'Likert') {
                 console.log(this.psicoform2[this.todelete])
-                this.psicoform2.splice(this.todelete,1)
+                this.psicoform2.splice(this.todelete, 1)
                 if (this.psicoform2.length == 0) {
                     this.disaagre = true
                 }
             }
             this.$nextTick(() => {
-                this.$bvModal.hide('modal-prevent-delete')
+                this.$bvModal.hide('modal-prevent-edit')
             })
         },
-        deleteall(){
+        deleteall() {
             this.psicoform1 = []
             this.psicoform2 = []
             this.selctype = false
@@ -509,11 +541,11 @@ export default {
             this.Note = 'Ninguna'
             this.optiontype = null
             this.optionbox = null
-             this.$nextTick(() => {
+            this.$nextTick(() => {
                 this.$bvModal.hide('modal-prevent-deleteall')
             })
         },
-        blocktype(){
+        blocktype() {
             this.selctype = true
         },
         addQuestion() {
@@ -638,6 +670,11 @@ export default {
             // Prevent modal from closing
             bvModalEvt.preventDefault()
             this.deleteall()
+        },
+        handleOkedit(bvModalEvt) {
+            // Prevent modal from closing
+            bvModalEvt.preventDefault()
+            this.pastenewansw()
         },
         handleSubmit() {
             if (!this.checkFormValidity()) {
