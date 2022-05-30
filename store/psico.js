@@ -14,6 +14,7 @@ export const state = () => ({
   pacilist: [],
   quest: [],
   trialanws: [],
+  dataansw: [],
 });
 
 export const mutations = {
@@ -40,8 +41,12 @@ export const mutations = {
     state.pacilist = payload;
   },
   settrialansw(state, payload) {
-    console.log(payload)
+    console.log(payload);
     state.trialanws = payload;
+  },
+  setdataansw(state, payload) {
+    console.log(payload);
+    state.dataansw = payload;
   },
   setInfo(state, payload) {
     state.infoasignaciones = payload;
@@ -382,17 +387,19 @@ export const actions = {
     }
   },
 
-  async getansw({ commit, state },payload) {
+  async getansw({ commit, state }, payload) {
     try {
-      const response = await Repository.get(`${apiTT}/findanwers?trial=${payload}`);
+      const response = await Repository.get(
+        `${apiTT}/findanwers?trial=${payload}`
+      );
       console.log(response);
       const msg = JSON.parse(JSON.stringify(response.data.message));
-      if (msg == 'Respuestas encontradas') {
+      if (msg == "Respuestas encontradas") {
         const result = JSON.parse(JSON.stringify(response.data.data));
         console.log(result);
-        commit("settrialansw", result);  
+        commit("settrialansw", result);
       }
-      console.log(msg)
+      console.log(msg);
       return msg;
     } catch (error) {
       console.log(error);
@@ -401,7 +408,9 @@ export const actions = {
 
   async getquest({ commit, state }, payload) {
     try {
-      const response = await Repository.get(`${apiTT}/editquest?trial=${payload.trial}&name=${payload.name}`);
+      const response = await Repository.get(
+        `${apiTT}/editquest?trial=${payload.trial}&name=${payload.name}`
+      );
       const result = JSON.parse(JSON.stringify(response.data.data));
       commit("setquest", result);
       const msg = JSON.parse(JSON.stringify(response.data.message));
@@ -410,9 +419,25 @@ export const actions = {
       console.log(error);
     }
   },
+
+  async getdataansw({ commit, state }, payload) {
+    try {
+      const response = await Repository.get(
+        `${apiTT}/anwsdata?trial=${payload}`
+      );
+      const result = JSON.parse(JSON.stringify(response.data.data));
+      commit("setdataansw", result);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      return msg;
+    } catch (error) {
+      console.log(error);
+    }
+  },
   async updatequest({ commit, state }, payload) {
     try {
-      const response = await Repository.post(`${apiTT}/upquest?trial=${payload.trial}&name=${payload.name}&quest=${payload.quest}&descrip=${payload.descrip}&note=${payload.nota}`);
+      const response = await Repository.post(
+        `${apiTT}/upquest?trial=${payload.trial}&name=${payload.name}&quest=${payload.quest}&descrip=${payload.descrip}&note=${payload.nota}`
+      );
       const msg = JSON.parse(JSON.stringify(response.data.message));
       return msg;
     } catch (error) {

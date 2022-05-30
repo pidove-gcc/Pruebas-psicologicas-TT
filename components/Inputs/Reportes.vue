@@ -8,8 +8,12 @@
     <div align="center">
         <b-button align="left" v-b-modal.modal-prevent-resp>Respuestas recibidas</b-button>
         <b-button align="center" v-b-modal.modal-prevent-resp2>Promedio de respuestas</b-button>
-        <b-button align="right" v-b-modal.modal-prevent-trial>Estadisticas de prueba</b-button>
+        <b-button align="right" v-b-modal.modal-prevent-data>Estadisticas de prueba</b-button>
     </div>
+    <div v-if="chartva" style="width:60%; height:60%;">
+            <Pie :datos="typegen" :numbers="countgen" />
+        </div>
+
     <b-modal id="modal-prevent-trial" ref="modal" hide-footer title="Seleccion de prueba" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal">
         <form ref="form" @submit.stop.prevent="gettrials" align="center">
             <b-form-select class="form-control" v-model="trialselect" align="center" id="questype" style="width: 70%" required>
@@ -35,9 +39,23 @@
             <b-button :disabled="validanwsflag" type="submit">Generar reporte</b-button>
         </form>
     </b-modal>
+
     <b-modal id="modal-prevent-resp2" ref="modal2" hide-footer title="Seleccion de prueba" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal">
         <form ref="form" @submit.stop.prevent="getanswprom" align="center">
             <b-form-select class="form-control" @change="createresplist" v-model="trialselect" align="center" id="questype" style="width: 70%" required>
+                <template #first>
+                    <b-form-select-option :value="null" style="background: gray" disabled>Seleccione
+                    </b-form-select-option>
+                    <b-form-select-option v-for="(trial, index) in pruebas" :value="trial.nombre_prueba" v-bind:key="index" style="background: gray">{{ trial.nombre_prueba }}</b-form-select-option>
+                </template>
+            </b-form-select>
+            <b-button :disabled="validanwsflag" type="submit">Generar reporte</b-button>
+        </form>
+    </b-modal>
+
+    <b-modal id="modal-prevent-data" ref="modal2" hide-footer title="Seleccion de prueba" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal">
+        <form ref="form" @submit.stop.prevent="createchart" align="center">
+            <b-form-select class="form-control" @change="createdatalist" v-model="trialselect" align="center" id="questype" style="width: 70%" required>
                 <template #first>
                     <b-form-select-option :value="null" style="background: gray" disabled>Seleccione
                     </b-form-select-option>
@@ -245,6 +263,28 @@
             <!-- <footer align="right">Este es un reporte generado por el sistema, carece de validez oficial</footer> -->
         </section>
     </vue-html2pdf>
+
+    <vue-html2pdf v-if="topdf" :show-layout="false" :float-layout="true" :enable-download="true" :preview-modal="true" :paginate-elements-by-height="1400" :filename="namereport" :pdf-quality="2" :manual-pagination="true" margin:4 pdf-format="a4" pdf-orientation="Portrait" pdf-content-width="800px" ref="html2Pdf6">
+        <section slot="pdf-content">
+            <!-- PDF Content Here -->
+            <div v-if="chartva" align="center">
+                <div style="width:90%; height:90%;">
+                <p style="color: black">Pacientes que han contestado esta prueba</p>
+                <div v-for="(data,index) in typegen" :key="index">
+                <p style="color: black">{{data}} : {{countgen[index]}}</p>
+                </div>
+                <!-- <p>{}</p>
+                <p style="color: black">{{typegen}}</p>
+                <p style="color: black">{{countgen}}</p>
+                <p style="color: black">{{labels}}</p>
+                <p style="color: black">{{data}}</p> -->
+
+                    <Pie :datos="typegen" :numbers="countgen" />
+                </div>
+            </div> 
+            <!-- <footer align="right">Este es un reporte generado por el sistema, carece de validez oficial</footer> -->
+        </section>
+    </vue-html2pdf>
 </div>
 </template>
 
@@ -252,44 +292,64 @@
 import {
     mapState
 } from "vuex";
+import Pie from '~/components/Charts/Pie.vue';
 export default {
-    name: 'Reportes',
+    name: "Reportes",
     data() {
         return {
             type: ["", "info", "success", "warning", "danger"],
             trialselect: null,
             validanwsflag: true,
             topdf: false,
+            chartva: false,
             trialshow: {
-                trial: '',
-                answertype: '',
-                quest: '',
+                trial: "",
+                answertype: "",
+                quest: "",
             },
             trialanws: [],
-            trialanwstype: '',
-            namereport: '',
-            titulo: '',
+            trialanwstype: "",
+            namereport: "",
+            titulo: "",
             prom: 0,
+             labels: [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ],
+            data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11],
+            typegen: ["mujer"],
+            countgen: [15]
             // Idea, poner en un modal, un select para seleccionar la prueba a buscar la respuesta, indicar quien respondio, que respondio y cuando respondio
-        }
+        };
     },
     computed: {
         ...mapState({
             pruebas: (state) => state.psico.pruebas,
             listapaci: (state) => state.psico.pacilist,
             answers: (state) => state.psico.trialanws,
+            dataanswers: (state) => state.psico.dataansw,
         }),
     },
     methods: {
         resetModal() {
-            this.name = ''
+            this.name = "";
             this.nameState = null,
-                this.message = '',
-                this.trialselect = null
+                this.message = "",
+                this.trialselect = null;
         },
         handleOk(bvModalEvt) {
             // Prevent modal from closing
-            bvModalEvt.preventDefault()
+            bvModalEvt.preventDefault();
             // Trigger submit handler
             // this.handleSubmit()
         },
@@ -301,67 +361,115 @@ export default {
             // 	html2canvas: { dpi: 192, letterRendering: true },
             // 	jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
             // })
-            this.$refs.html2Pdf.generatePdf()
+            this.$refs.html2Pdf.generatePdf();
         },
         createlistpaci() {
-            this.exportToPDF()
+            this.exportToPDF();
         },
         createtriallist() {
-            this.$refs.html2Pdf2.generatePdf()
+            this.$refs.html2Pdf2.generatePdf();
+        },
+        createchart() {
+            this.$nextTick(() => {
+                this.$bvModal.hide("modal-prevent-data");
+            });
+            this.$refs.html2Pdf6.generatePdf();
         },
         getanwslist() {
-            this.trialanwstype = this.answers[0].tipo
+            this.trialanwstype = this.answers[0].tipo;
             for (let index = 0; index < this.answers.length; index++) {
                 let data = {
                     nombre: this.answers[index].quien_respondio,
                     trial: JSON.parse(this.answers[index].reactivos_respuestas),
                     result: this.answers[index].analisis_tratamiento
-                }
-                this.trialanws.push(data)
-
+                };
+                this.trialanws.push(data);
             }
             this.$nextTick(() => {
-                this.$bvModal.hide('modal-prevent-resp')
-            })
-            this.$refs.html2Pdf4.generatePdf()
+                this.$bvModal.hide("modal-prevent-resp");
+            });
+            this.$refs.html2Pdf4.generatePdf();
         },
         getanswprom() {
-            let suma = 0
+            let suma = 0;
             for (let index = 0; index < this.answers.length; index++) {
-                suma = suma + this.answers[index].result
+                suma = suma + this.answers[index].result;
             }
-            this.prom = (suma / this.answers.length)
+            this.prom = (suma / this.answers.length);
             this.$nextTick(() => {
-                this.$bvModal.hide('modal-prevent-resp2')
-            })
-            this.$refs.html2Pdf5.generatePdf()
+                this.$bvModal.hide("modal-prevent-resp2");
+            });
+            this.$refs.html2Pdf5.generatePdf();
         },
         async gettrials() {
-            let prueba = this.pruebas.filter(x => x.nombre_prueba == this.trialselect)
-            this.trialshow.trial = prueba[0].nombre_prueba
+            let prueba = this.pruebas.filter(x => x.nombre_prueba == this.trialselect);
+            this.trialshow.trial = prueba[0].nombre_prueba;
             // let a = await this.$store.dispatch("paci/getansw", this.sansw);
             // let result = this.answer[0]
-            this.trialshow.answertype = prueba[0].tipo
-            this.trialshow.quest = JSON.parse(prueba[0].reactivos)
-            console.log(this.trialshow)
-            this.namereport = "Reporte_" + prueba[0].nombre_prueba
+            this.trialshow.answertype = prueba[0].tipo;
+            this.trialshow.quest = JSON.parse(prueba[0].reactivos);
+            console.log(this.trialshow);
+            this.namereport = "Reporte_" + prueba[0].nombre_prueba;
             this.$nextTick(() => {
-                this.$bvModal.hide('modal-prevent-trial')
-            })
-            this.$refs.html2Pdf3.generatePdf()
+                this.$bvModal.hide("modal-prevent-trial");
+            });
+            this.$refs.html2Pdf3.generatePdf();
         },
         async createresplist() {
-            this.titulo = this.trialselect
-            this.namereport = "Reporte_respuesta_de_" + this.trialselect
-            let user = localStorage.getItem('nick')
+            this.titulo = this.trialselect;
+            this.namereport = "Reporte_respuesta_de_" + this.trialselect;
+            let user = localStorage.getItem("nick");
             let msg = await this.$store.dispatch("psico/getansw", this.trialselect);
-            if (msg == 'Prueba contestada  no encontrado') {
-                this.notifyVue("top", "right", 'Esta prueba no tiene ninguna respuesta', 4, 'icon-simple-remove');
-                this.validanwsflag = true
-            } else if (msg == 'Respuestas encontradas') {
-                this.validanwsflag = false
-                this.trialanws = []
-                console.log(this.answers)
+            if (msg == "Prueba contestada  no encontrado") {
+                this.notifyVue("top", "right", "Esta prueba no tiene ninguna respuesta", 4, "icon-simple-remove");
+                this.validanwsflag = true;
+            } else if (msg == "Respuestas encontradas") {
+                this.validanwsflag = false;
+                this.trialanws = [];
+                console.log(this.answers);
+            }
+        },
+
+        async createdatalist() {
+             this.chartva = false
+            this.titulo = this.trialselect;
+            this.namereport = "Graficas_de_respuestas_de_" + this.trialselect;
+            let user = localStorage.getItem("nick");
+            let msg = await this.$store.dispatch("psico/getdataansw", this.trialselect);
+            if (msg == "Esta prueba no tiene respuestas") {
+                this.notifyVue("top", "right", "Esta prueba no tiene ninguna respuesta", 4, "icon-simple-remove");
+                this.validanwsflag = true;
+            } else if (msg == "Respuestas encontradas") {
+                // this.validanwsflag = false;
+                // this.labels = [],
+                //     this.data = [],
+                    // this.typegen = [],
+                    // this.countgen = []
+                console.log("Esto recibo del store de data")
+                console.log(this.dataanswers);
+                // this.cantpaci = this.dataanswers.length
+                for (let index = 0; index < this.dataanswers.length; index++) {
+                    if (this.typegen.indexOf(this.dataanswers[index].sexo) === -1) {
+                        this.typegen.push(this.dataanswers[index].sexo);
+                        this.countgen.push(1)
+                        console.log('El array es: ' + this.typegen);
+                    } else if (this.typegen.indexOf(this.dataanswers[index].sexo) > -1) {
+                        console.log(this.dataanswers[index].sexo + ' ya existe en la colección.');
+                        this.countgen[this.typegen.indexOf(this.dataanswers[index].sexo)]++
+                    }
+                }
+                console.log("Asi esta labels")
+                console.log(this.labels)
+                console.log("Asi esta data")
+                console.log(this.data)
+                console.log("Asi esta typegen")
+                console.log(this.typegen)
+                console.log("Asi esta countgen")
+                console.log(this.countgen)
+                this.labels = this.typegen
+                this.data = this.countgen
+                this.validanwsflag = false;
+                this.chartva = true
             }
         },
         notifyVue(verticalAlign, horizontalAlign, msm, color, pic) {
@@ -377,12 +485,15 @@ export default {
         },
     },
     async beforeMount() {
-        let user = localStorage.getItem('nick')
+        let user = localStorage.getItem("nick");
         let msg3 = await this.$store.dispatch("psico/listpaci", user);
         let msg = await this.$store.dispatch("psico/getprueba", user);
-        console.log(this.listapaci)
-        console.log(this.pruebas)
-        this.topdf = true
+        console.log(this.listapaci);
+        console.log(this.pruebas);
+        this.topdf = true;
+    },
+    components: {
+        Pie
     }
 }
 </script>
