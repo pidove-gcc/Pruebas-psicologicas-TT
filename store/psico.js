@@ -40,6 +40,7 @@ export const mutations = {
     state.pacilist = payload;
   },
   settrialansw(state, payload) {
+    console.log(payload)
     state.trialanws = payload;
   },
   setInfo(state, payload) {
@@ -383,10 +384,16 @@ export const actions = {
 
   async getansw({ commit, state },payload) {
     try {
-      const response = await Repository.get(`${apiTT}/findanwers?trial${payload}`);
-      const result = JSON.parse(JSON.stringify(response.data.data));
-      commit("settrialansw", result);
-      return result;
+      const response = await Repository.get(`${apiTT}/findanwers?trial=${payload}`);
+      console.log(response);
+      const msg = JSON.parse(JSON.stringify(response.data.message));
+      if (msg == 'Respuestas encontradas') {
+        const result = JSON.parse(JSON.stringify(response.data.data));
+        console.log(result);
+        commit("settrialansw", result);  
+      }
+      console.log(msg)
+      return msg;
     } catch (error) {
       console.log(error);
     }

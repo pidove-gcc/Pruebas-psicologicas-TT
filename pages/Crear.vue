@@ -14,6 +14,7 @@
             <div align="right">
                 <br>
                 <b-button v-b-modal.modal-prevent-deleteall>Borrar todo</b-button>
+                <b-button  v-if="typequest == 'Likert' && psicoform2.length > 0" v-b-modal.modal-prevent-edit @click.prevent="getanwsindex(0)">Editar respuestas</b-button>
             </div>
         </div>
         <div align="left" v-if="typeclasif != null">
@@ -115,13 +116,11 @@
                                 <b-form-radio-group id="radio-group-1" :options="question.opciones" name="radio-options"></b-form-radio-group>
                                 <div class="form-check-inline">
                                     <p align="right">Tipo de pregunta: {{question.tipo}}</p>
-                                    <b-button v-b-modal.modal-prevent-edit @click.prevent="getanwsindex(index)">Editar respuestas</b-button>
+                                    <!-- <b-button v-b-modal.modal-prevent-edit @click.prevent="getanwsindex(index)">Editar respuestas</b-button> -->
                                     <!-- <p>: {{question.opciones[1]}}</p> -->
-                                    <div v-for="anws in question.opciones" :key="anws.index">
+                                    <!-- <div v-for="anws in question.opciones" :key="anws.index">
                                     <b-form-input v-model="anws.text"></b-form-input>
-                                    </div>
-                                    <p>{{question.pregunta}}</p>
-                                    <p>{{question.opciones}}</p>
+                                    </div> -->
                                 </div>
                                 
                             </b-form-group>
@@ -482,6 +481,153 @@ export default {
                         value: 1
                     },
                 ],
+            },
+            boxoption4: {
+                option1: [{ //ansiedad estado
+                        text: 'No',
+                        value: 1
+                    },
+                    {
+                        text: 'Un poco',
+                        value: 2
+                    },
+                    {
+                        text: 'Bastante',
+                        value: 3
+                    },
+                    {
+                        text: 'Mucho',
+                        value: 4
+                    },
+                ],
+                option2: [{ //Ansiedad rasgo
+                        text: 'Casi nunca',
+                        value: 1
+                    },
+                    {
+                        text: 'Algunas veces',
+                        value: 2
+                    },
+                    {
+                        text: 'Frecuentemente',
+                        value: 3
+                    },
+                    {
+                        text: 'Casi siempre',
+                        value: 4
+                    },
+                ],
+                option3: [{ //Ansiedad patologica
+                        text: 'Si',
+                        value: 1
+                    },
+                    {
+                        text: 'No',
+                        value: 0
+                    },
+                ],
+                option4: [{ //Ansiedad beck
+                        text: 'En absoluto',
+                        value: 0
+                    },
+                    {
+                        text: 'Levemente, no me molesta mucho',
+                        value: 1
+                    },
+                    {
+                        text: 'Moderadamente, fue muy desagradable, pero podia soportarlo',
+                        value: 2
+                    },
+                    {
+                        text: 'Severamente, casi no podia soportarlo',
+                        value: 3
+                    },
+                ],
+                option5: [{ //Depresion estado
+                        text: 'No',
+                        value: 0
+                    },
+                    {
+                        text: 'Un poco',
+                        value: 1
+                    },
+                    {
+                        text: 'Bastante',
+                        value: 2
+                    },
+                    {
+                        text: 'Mucho',
+                        value: 3
+                    },
+                ],
+                option6: [{ //Depresion rasgo
+                        text: 'Casi nunca',
+                        value: 0
+                    },
+                    {
+                        text: 'Algunas veces',
+                        value: 1
+                    },
+                    {
+                        text: 'Frecuentemente',
+                        value: 2
+                    },
+                    {
+                        text: 'Casi siempre',
+                        value: 3
+                    },
+                ],
+                option7: [{ //Escala del Centro de Estudios Epidemiológicos de la depresión
+                        text: 'Nunca',
+                        value: 0
+                    },
+                    {
+                        text: 'Casi nunca',
+                        value: 1
+                    },
+                    {
+                        text: 'Con frecuencia',
+                        value: 2
+                    },
+                    {
+                        text: 'Todo o casi todo el tiempo',
+                        value: 3
+                    },
+                ],
+                option8: [{ //Auto escala de depresión de Zung y Conde negativa
+                        text: 'Muy pocas veces',
+                        value: 1
+                    },
+                    {
+                        text: 'Algunas veces',
+                        value: 2
+                    },
+                    {
+                        text: 'Muchas veces',
+                        value: 3
+                    },
+                    {
+                        text: 'Siempre me ocurre',
+                        value: 4
+                    },
+                ],
+                option9: [{ //Auto escala de depresión de Zung y Conde positiva
+                        text: 'Muy pocas veces',
+                        value: 4
+                    },
+                    {
+                        text: 'Algunas veces',
+                        value: 3
+                    },
+                    {
+                        text: 'Muchas veces',
+                        value: 2
+                    },
+                    {
+                        text: 'Siempre me ocurre',
+                        value: 1
+                    },
+                ],
             }
         }
     },
@@ -541,6 +687,7 @@ export default {
             this.Note = 'Ninguna'
             this.optiontype = null
             this.optionbox = null
+            this.boxoption3 = this.boxoption4
             this.$nextTick(() => {
                 this.$bvModal.hide('modal-prevent-deleteall')
             })
