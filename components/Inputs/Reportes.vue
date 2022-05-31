@@ -11,8 +11,8 @@
         <b-button align="right" v-b-modal.modal-prevent-data>Estadisticas de prueba</b-button>
     </div>
     <div v-if="chartva" style="width:60%; height:60%;">
-            <Pie :datos="typegen" :numbers="countgen" />
-        </div>
+        <Pie :datos="typegen" :numbers="countgen" />
+    </div>
 
     <b-modal id="modal-prevent-trial" ref="modal" hide-footer title="Seleccion de prueba" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal">
         <form ref="form" @submit.stop.prevent="gettrials" align="center">
@@ -268,12 +268,17 @@
         <section slot="pdf-content">
             <!-- PDF Content Here -->
             <div v-if="chartva" align="center">
+                <p>
+                    <img position="top-right" src="~/static/Logo.jpeg" alt="Logo" width="100" height="100">
+                </p>
+                <br>
+                <hr>
                 <div style="width:90%; height:90%;">
-                <p style="color: black">Pacientes que han contestado esta prueba</p>
-                <div v-for="(data,index) in typegen" :key="index">
-                <p style="color: black">{{data}} : {{countgen[index]}}</p>
-                </div>
-                <!-- <p>{}</p>
+                    <p style="color: black">Pacientes que han contestado esta prueba</p>
+                    <div v-for="(data,index) in typegen" :key="index">
+                        <p style="color: black">{{data}} : {{countgen[index]}}</p>
+                    </div>
+                    <!-- <p>{}</p>
                 <p style="color: black">{{typegen}}</p>
                 <p style="color: black">{{countgen}}</p>
                 <p style="color: black">{{labels}}</p>
@@ -281,7 +286,17 @@
 
                     <Pie :datos="typegen" :numbers="countgen" />
                 </div>
-            </div> 
+                <div style="width:90%; height:90%;">
+                    <p style="color: black">Resultados obtenidos</p>
+                    <!-- <p>{}</p>
+                <p style="color: black">{{typegen}}</p>
+                <p style="color: black">{{countgen}}</p>
+                <p style="color: black">{{labels}}</p>
+                <p style="color: black">{{data}}</p> -->
+
+                    <Bar :datos="typeresult" :numbers="countresult" />
+                </div>
+            </div>
             <!-- <footer align="right">Este es un reporte generado por el sistema, carece de validez oficial</footer> -->
         </section>
     </vue-html2pdf>
@@ -293,6 +308,7 @@ import {
     mapState
 } from "vuex";
 import Pie from '~/components/Charts/Pie.vue';
+import Bar from "~/components/Charts/Bar.vue";
 export default {
     name: "Reportes",
     data() {
@@ -312,7 +328,7 @@ export default {
             namereport: "",
             titulo: "",
             prom: 0,
-             labels: [
+            labels: [
                 "January",
                 "February",
                 "March",
@@ -328,7 +344,10 @@ export default {
             ],
             data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11],
             typegen: ["mujer"],
-            countgen: [15]
+            countgen: [6],
+            typeresult: [],
+            countresult: [],
+            tableselect: '',
             // Idea, poner en un modal, un select para seleccionar la prueba a buscar la respuesta, indicar quien respondio, que respondio y cuando respondio
         };
     },
@@ -431,7 +450,7 @@ export default {
         },
 
         async createdatalist() {
-             this.chartva = false
+            this.chartva = false
             this.titulo = this.trialselect;
             this.namereport = "Graficas_de_respuestas_de_" + this.trialselect;
             let user = localStorage.getItem("nick");
@@ -443,8 +462,8 @@ export default {
                 // this.validanwsflag = false;
                 // this.labels = [],
                 //     this.data = [],
-                    // this.typegen = [],
-                    // this.countgen = []
+                // this.typegen = [],
+                // this.countgen = []
                 console.log("Esto recibo del store de data")
                 console.log(this.dataanswers);
                 // this.cantpaci = this.dataanswers.length
@@ -468,6 +487,161 @@ export default {
                 console.log(this.countgen)
                 this.labels = this.typegen
                 this.data = this.countgen
+
+                if (this.dataanswers[0].clasif == 'Inventario de Ansiedad Estado de Ch. Spielberger') {
+                    let titulos = ['Bajo grado de ansiedad', 'Medio grado de ansiedad', 'Alto grado de ansiedad']
+                    let conta = [0, 0, 0]
+                    this.typeresult = titulos
+                    this.countresult = conta
+                     for (let index = 0; index < this.dataanswers.length; index++) {
+                         if (this.dataanswers[index].result <= 30) {
+                             this.countresult[0]++
+                         }
+                         else if(this.dataanswers[index].result > 30 && this.dataanswers[index].result <= 44){
+                             this.countresult[1]++
+                         }
+                         else if(this.dataanswers[index].result >= 45){
+                             this.countresult[2]++
+                         }
+                        
+                    
+                }
+                } else if (this.dataanswers[0].clasif == 'Inventario de Ansiedad Rasgo de Ch. Spielberger') {
+                    let titulos = ['Bajo grado de ansiedad', 'Medio grado de ansiedad', 'Alto grado de ansiedad']
+                    let conta = [0, 0, 0]
+                    this.typeresult = titulos
+                    this.countresult = conta
+                     for (let index = 0; index < this.dataanswers.length; index++) {
+                         if (this.dataanswers[index].result <= 30) {
+                             this.countresult[0]++
+                         }
+                         else if(this.dataanswers[index].result > 30 && this.dataanswers[index].result <= 44){
+                             this.countresult[1]++
+                         }
+                         else if(this.dataanswers[index].result >= 45){
+                             this.countresult[2]++
+                         }
+                        
+                    
+                }
+                } else if (this.dataanswers[0].clasif == 'Escala de Ansiedad patológica de J. Grau y cols') {
+                    let titulos = ['Baja ansiedad', 'Ansiedad moderada', 'Ansiedad alta']
+                    let conta = [0, 0, 0]
+                    this.typeresult = titulos
+                    this.countresult = conta
+                     for (let index = 0; index < this.dataanswers.length; index++) {
+                         if (this.dataanswers[index].result <= 18) {
+                             this.countresult[0]++
+                         }
+                         else if(this.dataanswers[index].result > 19 && this.dataanswers[index].result <= 24){
+                             this.countresult[1]++
+                         }
+                         else if(this.dataanswers[index].result >= 25){
+                             this.countresult[2]++
+                         }
+                        
+                    
+                }
+                } else if (this.dataanswers[0].clasif == 'Inventario Ansiedad Beck') {
+                    let titulos = ['Estado de ánimo bajo a moderado', 'Depresión ausente o mínima', 'Depresión leve', 'Depresión moderada', 'Depresión de forma severa']
+                    let conta = [0, 0, 0, 0, 0]
+                    this.typeresult = titulos
+                    this.countresult = conta
+                     for (let index = 0; index < this.dataanswers.length; index++) {
+                         if (this.dataanswers[index].result <= 4) {
+                             this.countresult[0]++
+                         }
+                         else if(this.dataanswers[index].result > 5 && this.dataanswers[index].result <= 12){
+                             this.countresult[1]++
+                         }
+                         else if(this.dataanswers[index].result > 13 && this.dataanswers[index].result <= 20){
+                             this.countresult[2]++
+                         }
+                         else if(this.dataanswers[index].result > 21 && this.dataanswers[index].result <= 25){
+                             this.countresult[3]++
+                         }
+                         else if(this.dataanswers[index].result >= 26){
+                             this.countresult[4]++
+                         }
+                       
+                }
+                } else if (this.dataanswers[0].clasif == 'Inventario de Depresión Estado') {
+                    let titulos = ['Bajo grado de depresión', 'Medio grado de depresión', 'Alto grado de depresión']
+                    let conta = [0, 0, 0]
+                    this.typeresult = titulos
+                    this.countresult = conta
+                     for (let index = 0; index < this.dataanswers.length; index++) {
+                         if (this.dataanswers[index].result <= 34) {
+                             this.countresult[0]++
+                         }
+                         else if(this.dataanswers[index].result > 35 && this.dataanswers[index].result <= 42){
+                             this.countresult[1]++
+                         }
+                         else if(this.dataanswers[index].result >= 43){
+                             this.countresult[2]++
+                         }
+                        
+                    
+                }
+                } else if (this.dataanswers[0].clasif == 'Inventario de Depresión Rasgo') {
+                    let titulos = ['Bajo grado de depresión', 'Medio grado de depresión', 'Alto grado de depresión']
+                    let conta = [0, 0, 0]
+                    this.typeresult = titulos
+                    this.countresult = conta
+                     for (let index = 0; index < this.dataanswers.length; index++) {
+                         if (this.dataanswers[index].result <= 35) {
+                             this.countresult[0]++
+                         }
+                         else if(this.dataanswers[index].result > 36 && this.dataanswers[index].result <= 46){
+                             this.countresult[1]++
+                         }
+                         else if(this.dataanswers[index].result >= 47){
+                             this.countresult[2]++
+                         }
+                        
+                    
+                }
+                } else if (this.dataanswers[0].clasif == 'Escala del Centro de Estudios Epidemiológicos de la depresión') {
+                    let titulos = ['<=25%', '<=50', '<=100>']
+                    let conta = [0, 0, 0]
+                    this.typeresult = titulos
+                    this.countresult = conta
+                     for (let index = 0; index < this.dataanswers.length; index++) {
+                         if (this.dataanswers[index].result <= 25) {
+                             this.countresult[0]++
+                         }
+                         else if(this.dataanswers[index].result > 25 && this.dataanswers[index].result <= 50){
+                             this.countresult[1]++
+                         }
+                         else if(this.dataanswers[index].result > 50){
+                             this.countresult[2]++
+                         }
+                        
+                    
+                }
+                } else if (this.dataanswers[0].clasif == 'Auto escala de depresión de Zung y Conde') {
+                    let titulos = ['No es depresión', 'Depresión leve', 'Depresión moderada o depresión neurótica media', 'Depresión neurótica muy alta', 'Depresión severa']
+                    let conta = [0, 0, 0, 0, 0]
+                    this.typeresult = titulos
+                    this.countresult = conta
+                     for (let index = 0; index < this.dataanswers.length; index++) {
+                         if (this.dataanswers[index].result <= 33) {
+                             this.countresult[0]++
+                         }
+                         else if(this.dataanswers[index].result > 34 && this.dataanswers[index].result <= 40){
+                             this.countresult[1]++
+                         }
+                         else if(this.dataanswers[index].result > 41 && this.dataanswers[index].result <= 47){
+                             this.countresult[2]++
+                         }
+                         else if(this.dataanswers[index].result > 48 && this.dataanswers[index].result <= 54){
+                             this.countresult[3]++
+                         }
+                         else if(this.dataanswers[index].result >= 55){
+                             this.countresult[4]++
+                         }
+                }
+                }
                 this.validanwsflag = false;
                 this.chartva = true
             }
@@ -493,8 +667,9 @@ export default {
         this.topdf = true;
     },
     components: {
-        Pie
-    }
+    Pie,
+    Bar
+}
 }
 </script>
 
