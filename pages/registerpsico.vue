@@ -62,6 +62,7 @@
 import {mapState} from "vuex";
 export default {
     name: 'registerpsico',
+    middleware: "admin",
     data() {
         return {
             type: ["", "info", "success", "warning", "danger"],

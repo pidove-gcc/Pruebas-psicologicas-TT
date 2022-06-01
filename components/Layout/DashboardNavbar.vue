@@ -174,6 +174,7 @@ export default {
     },
     logout(){
       this.$cookies.remove('auth');
+      this.$cookies.remove('level');
       localStorage.removeItem('level');
       localStorage.removeItem('usuario');
       localStorage.removeItem('email');

@@ -8,6 +8,7 @@
 <script>
 import Asignlist2 from "~/components/Inputs/Asignlist2";
 export default {
+  middleware: "paci",
   components: { Asignlist2 }
 }
 </script>

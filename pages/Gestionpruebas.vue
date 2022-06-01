@@ -8,6 +8,7 @@
 <script>
 import Pruebalist from '~/components/Inputs/Pruebalist'
 export default {
+  middleware: "psico",
 components: {
     Pruebalist
 }

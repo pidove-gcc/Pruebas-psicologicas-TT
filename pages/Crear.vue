@@ -171,6 +171,7 @@
 <script>
 export default {
     name: 'Crear',
+    middleware: "psico",
     data() {
         return {
             Titulo: "Nueva prueba",

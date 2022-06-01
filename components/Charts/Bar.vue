@@ -60,7 +60,7 @@ export default {
         {
         //   label: ['algo','algo2'],
         //   backgroundColor: "#f87979",
-        backgroundColor: [ '#00D8FF', '#DD1B16', '#ded826','#41B883', '#E46651', '#7326de','#2632de','#c526de','#de7626','#5ade26','#de265a','#10de7e'],
+        backgroundColor: ['#ded826','#41B883','#00D8FF', '#E46651', '#7326de','#2632de','#DD1B16','#c526de','#de7626','#5ade26','#de265a','#10de7e'],
         //   data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11],
         data: this.numbers
           

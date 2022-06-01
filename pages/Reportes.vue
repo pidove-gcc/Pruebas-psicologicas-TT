@@ -16,6 +16,7 @@ import Reportes from '~/components/Inputs/Reportes.vue';
 import Pie from '~/components/Charts/Pie.vue';
 // import PieChart from '~/components/Charts/Pie.vue'
 export default {
+    middleware: "psico",
     components: {
         Reportes,
         Pie

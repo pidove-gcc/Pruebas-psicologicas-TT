@@ -232,6 +232,7 @@ export default {
             if (msg == 'Bienvenido') {
                 msg = msg + ": " + this.userps
                 this.$store.dispatch("user/setAuth", true);
+                this.$store.dispatch("user/setprivi", localStorage.getItem('level'));
                 this.$router.push("/");
                 this.notifyVue("top", "right", msg, 2, 'icon-satisfied');
             } else if (msg == 'Credenciales invalidas') {
@@ -239,8 +240,9 @@ export default {
             } else if (msg == 'Psicologo no registrado') {
                 let msg2 = await this.$store.dispatch("paci/setinfo", this.usuario);
                 if (msg2 == 'Bienvenido') {
-                    msg2 = msg2 + ": " + this.userp
+                    msg2 = msg2 + ": " + this.userp 
                     this.$store.dispatch("user/setAuth", true);
+                    this.$store.dispatch("user/setprivi", localStorage.getItem('level'));
                     this.$router.push("/");
                     this.notifyVue("top", "right", msg2, 2, 'icon-satisfied');
                 } else if (msg2 == 'Credenciales invalidas') {

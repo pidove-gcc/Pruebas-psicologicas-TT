@@ -45,6 +45,7 @@ export default {
           if (msg == 'Bienvenido') {
                 msg = msg + ": " + this.usera
                 this.$store.dispatch("user/setAuth", true);
+                 this.$store.dispatch("user/setprivi", localStorage.getItem('level'));
                 this.$router.push("/");
                 this.notifyVue("top", "right", msg, 2, 'icon-satisfied');
             }
@@ -70,5 +71,8 @@ export default {
 .container {
     display: flex;
     justify-content: center;
+}
+::v-deep .dropdown .nav-link {
+   color: #000!important;
 }
 </style>

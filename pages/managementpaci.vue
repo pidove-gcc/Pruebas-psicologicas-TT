@@ -11,6 +11,7 @@ import {
 } from "vuex";
 import Pacilist from '~/components/Inputs/Pacilist.vue'
 export default {
+    middleware: "admin",
     components: {
         Pacilist,
     },

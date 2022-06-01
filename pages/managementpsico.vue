@@ -12,6 +12,7 @@ import {
 } from "vuex";
 import Psicolist from '~/components/Inputs/Psicolist.vue'
 export default {
+    middleware: "admin",
     components: {
          Psicolist,
     },
