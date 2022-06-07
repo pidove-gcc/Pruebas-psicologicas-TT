@@ -156,6 +156,10 @@
                 </template>
             </b-form-select>
         </form>
+        <div align="right">
+            <b-button @click.prevent="showpic">¿Qué es una pregunta positiva o negativa?</b-button>
+            <img v-if="showimg" src="img/preguntas_posi_nega.jpeg" />
+        </div>
     </b-modal>
     <b-modal id="modal-prevent-delete" ref="modal3" title="Borrar pregunta" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOkd">¿Deseas borrar esta pregunta?</b-modal>
     <b-modal id="modal-prevent-deleteall" ref="modal4" title="Borrar todos los ajustes" header-bg-variant="default" footer-bg-variant="default" body-bg-variant="default" body-text-variant="light" @show="resetModal" @hidden="resetModal" @ok="handleOkda">¿Deseas borrar todas las preguntes y ajustes seleccionados?</b-modal>
@@ -181,6 +185,7 @@ export default {
             typequest: null,
             todelete: null,
             toedit: 0,
+            showimg: false,
             auxanws: '',
             optiontype: null,
             selctype: false,
@@ -633,6 +638,9 @@ export default {
         }
     },
     methods: {
+        showpic(){
+            this.showimg = true;
+        },
         changetype() {
             if (this.typeclasif == 'Escala de Ansiedad patológica de J. Grau y cols') {
                 this.boxtype = this.boxtype2
@@ -801,7 +809,8 @@ export default {
         resetModal() {
             this.name = ''
             this.nameState = null
-            this.optiontype = null
+            this.optiontype = null,
+            this.showimg = false
         },
         handleOk(bvModalEvt) {
             // Prevent modal from closing
